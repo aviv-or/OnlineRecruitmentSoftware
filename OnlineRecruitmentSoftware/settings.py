@@ -25,7 +25,8 @@ SECRET_KEY = 'e$rsns@lx-6wc6!xm3y6o_8xxk222w+kp1x^a07w+fnvrk!3xx'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+#ALLOWED_HOSTS = ['sweb03-bluemixtest.eu-gb.mybluemix.net' ]
+ALLOWED_HOSTS = ['localhost','sweb03-bluemixtest.eu-gb.mybluemix.net' ]
 
 
 # Application definition
@@ -37,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'login',
 ]
 
 MIDDLEWARE = [
@@ -54,7 +56,7 @@ ROOT_URLCONF = 'OnlineRecruitmentSoftware.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -118,3 +120,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static"),]
+STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR),"static_cdn")
