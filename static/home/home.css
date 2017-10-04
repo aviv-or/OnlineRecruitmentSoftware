@@ -1,0 +1,20 @@
+#banner-internal
+{
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+}
+
+#banner-internal #welcome,#software
+{
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	letter-spacing: 2;
+	color: #ABB7B7;
+}
+
+#banner-internal #software
+{
+	font-size: 30px;
+}
