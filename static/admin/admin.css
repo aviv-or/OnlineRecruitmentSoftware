@@ -1,0 +1,39 @@
+body
+{
+	background-color: #fff;
+}
+
+.org-card{
+	background-color: #fff;
+	box-shadow: 0px 0px 1px #aaa;
+	margin: 15px 0px 15px 30px;
+}
+
+.org-name{
+	padding: 10px;
+	font-size: 20px
+}
+
+.org-email, .org-website, .org-location
+{
+	padding-left: 10px;
+}
+
+.org-desc
+{
+	padding: 10px;
+	font-size: 16px;
+}
+.org-card a
+{
+	width: 100%;
+}
+
+.org-btn
+{
+	width: 100%;
+	min-height: 40px;
+	line-height: 40px;
+	text-align: center;
+	background-color: #ededed;
+}

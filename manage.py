@@ -5,7 +5,6 @@ from OnlineRecruitmentSoftware import connection
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", "OnlineRecruitmentSoftware.settings")
-    connection.initialise()
     try:
         from django.core.management import execute_from_command_line
     except ImportError:

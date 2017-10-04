@@ -11,13 +11,13 @@
 <div class="col-xs-10 col-md-8 col-lg-4" id="login_box">
 	<div class="row">
 		<div class="col-sm-10 col-sm-push-1" id="login_box_internal">
-			<span id="login_title"><h3>Login</h3></span><br>
+			<span id="login_title"><h3>Login as Admin</h3></span><br>
 			{% if alert %}
 			<div class="alert alert-{{ alert }}">
 				{{ alertmessage }}
 			</div>
 			{% endif %}
-			<form method="post" action="/login"> {% csrf_token %}
+			<form method="post" action="/admin/login"> {% csrf_token %}
 				<div class="form-group">
 					<label for="email">Email</label>
 					<input type="email" class="form-control" id="email" name="email" placeholder="JohnDoe@something.com">
@@ -27,20 +27,10 @@
 					<input type="password" class="form-control" id="pwd" name="pwd" placeholder="Password">
 				</div>
 				<div class="form-group">
-					<label>
-						<input type="checkbox" name="org">
-						<span id="org">Login as Organization</span>
-					</label>
-				</div>
-				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-block">Submit</button>
 				</div>
 				<input type="hidden" name="redirect" value="{{ redirect }}">
 			</form>
-			<br>
-			<div id="register">
-				<span id="question">Don't have an account ?</span><span id="signup"> <a href="/register/user">Sign Up </a></span>
-			</div>
 		</div>
 	</div>
 </div>

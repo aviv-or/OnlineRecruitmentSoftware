@@ -19,15 +19,8 @@ def home(request):
 	# client = Cloudant(cloudant_user, cloudant_pass, url=cloudant_url, connect=True, auto_renew=True)
 	# my_database = client['users']
 
-	my_database = connection.conn['users']
-
-	arr = []
-
-	for document in my_database:
-		arr.append(document)
-
-	context = {'db': my_database}
-
+	context = {}
+	
 	if 'name' in request.session:
 		context['name'] = request.session['name']
 	else:

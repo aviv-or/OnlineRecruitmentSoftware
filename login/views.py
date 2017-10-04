@@ -2,8 +2,6 @@ from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.views import View
 from OnlineRecruitmentSoftware import connection, authhelper
-from cloudant.document import Document
-from cloudant.database import CloudantDatabase
 
 """
 authcode
@@ -11,6 +9,7 @@ authcode
 0: Something Else
 1: Wrong Username or Password
 2: Registered Sucessfull
+4: Organization Not Yet Verified
 """
 
 class LoginHandler(View):
@@ -33,12 +32,16 @@ class LoginHandler(View):
 			elif request.session["authcode"] == 2:
 				context['alert'] = 'success'
 				context["alertmessage"] = "Registration was successful! Log In to Continue"
+
+			elif request.session["authcode"] == 4:
+				context['alert'] = 'warning'
+				context["alertmessage"] = "Organization Not Yet Verified"
 			
 			del request.session['authcode']
 		else:
-			context["error"] = False
+			context["alert"] = False
 
-		return render(request, "login/login.html", context);
+		return render(request, "login/login.html", context)
 
 	def post(self,request):
 
@@ -53,19 +56,30 @@ class LoginHandler(View):
 
 			pwd = authhelper.crypt(request.POST['pwd'])
 			email = request.POST['email']
-
+			client = connection.create()
+			is_org = False
 			if 'org' in request.POST:
-				print("log in as ORG ******* ")
-				my_database = connection.conn['organization']
-				print(my_database['johndoe@gmail.com'])
+				my_database = client['organization']
+				is_org = True
 			else:
-				print("log in as USER ******* ")
-				my_database = connection.conn['users']
+				my_database = client['users']
 
-			if email in my_database:			
+			for doc in my_database:
+				print(doc)
+
+			if email in my_database:
 				doc = my_database[email]
+				if is_org:
+					if not doc['verified']:
+						request.session['authcode'] = 4
+						return HttpResponseRedirect("/login?redirect="+redirect)
+
 				if doc['password'] == pwd:
 					request.session['name'] = doc['name']
+					if is_org:
+						request.session['usertype'] = 'O'
+					else:
+						request.session['usertype'] = 'U'
 					return HttpResponseRedirect(redirect)
 
 			request.session['authcode'] = 1
@@ -76,8 +90,15 @@ class LoginHandler(View):
 
 class LogoutHandler(View):
 	def get(self,request):
-		redirect = request.GET['redirect']
-		del request.session['name']
+		redirect = '/'
+		if 'redirect' in request.GET:
+			redirect = request.GET['redirect']
+
+		if 'name' in request.session:
+			del request.session['name']
+		if 'usertype' in request.session:
+			del request.session['usertype']
+
 		return HttpResponseRedirect(redirect)
 
 class RegisterUser(View):
@@ -86,11 +107,13 @@ class RegisterUser(View):
 
 	def post(self, request):
 		data = request.POST
+
 		if 'name' in data and 'email' in data and 'pwd' in data:
 			name = data['name']
 			_id = data['email']
 			pwd = authhelper.crypt(data['pwd'])
-			my_database = connection.conn['users']
+			client = connection.create()
+			my_database = client['users']
 			doc = {"_id": _id, "name": name, "password": pwd}
 			new_doc = my_database.create_document(doc)
 			if new_doc.exists():
@@ -109,6 +132,7 @@ class RegisterOrg(View):
 		return render(request, "register/registerorg.html", {})
 
 	def post(self, request):
+
 		data = request.POST
 		if 'name' in data and 'description' in data and 'website' in data and 'location' in data and 'category' in data and 'email' in data and 'pwd' in data :
 			_id = data['email']
@@ -120,7 +144,8 @@ class RegisterOrg(View):
 
 			pwd = authhelper.crypt(data['pwd'])
 
-			my_database = connection.conn['organization']
+			client = connection.create()
+			my_database = client['organization']
 
 			doc = {
 				"_id": _id,
