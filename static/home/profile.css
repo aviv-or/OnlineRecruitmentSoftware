@@ -1,0 +1,30 @@
+#banner-internal #welcome,#username
+{
+	text-align: center;
+	font-size: 40px;
+	font-weight: bold;
+	letter-spacing: 2;
+	color: #ABB7B7;
+}
+
+#banner-internal #username
+{
+	font-size: 24px;
+}
+
+#add_emp
+{
+	font-size: 20px;
+	margin: 0px 0px 20px 0px;
+}
+
+#head
+{
+	font-size: 20px;
+	text-transform: uppercase;
+}
+
+#name
+{
+	font-size: 20px;
+}

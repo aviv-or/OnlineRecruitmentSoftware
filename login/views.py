@@ -51,7 +51,6 @@ class LoginHandler(View):
 		if 'redirect' in request.POST:
 			redirect = request.POST['redirect']
 			
-
 		if 'email' in request.POST and 'pwd' in request.POST:
 
 			pwd = authhelper.crypt(request.POST['pwd'])
@@ -65,7 +64,7 @@ class LoginHandler(View):
 				my_database = client['users']
 
 			for doc in my_database:
-				print(doc)
+				pass
 
 			if email in my_database:
 				doc = my_database[email]
@@ -75,11 +74,11 @@ class LoginHandler(View):
 						return HttpResponseRedirect("/login?redirect="+redirect)
 
 				if doc['password'] == pwd:
-					request.session['name'] = doc['name']
+					request.session['user_id'] = doc['_id']
 					if is_org:
-						request.session['usertype'] = 'O'
+						request.session['user_type'] = 'O'
 					else:
-						request.session['usertype'] = 'U'
+						request.session['user_type'] = 'U'
 					return HttpResponseRedirect(redirect)
 
 			request.session['authcode'] = 1
@@ -94,10 +93,10 @@ class LogoutHandler(View):
 		if 'redirect' in request.GET:
 			redirect = request.GET['redirect']
 
-		if 'name' in request.session:
-			del request.session['name']
-		if 'usertype' in request.session:
-			del request.session['usertype']
+		if 'user_type' in request.session:
+			del request.session['user_type']
+		if 'user_id' in request.session:
+			del request.session['user_id']
 
 		return HttpResponseRedirect(redirect)
 
@@ -114,11 +113,11 @@ class RegisterUser(View):
 			pwd = authhelper.crypt(data['pwd'])
 			client = connection.create()
 			my_database = client['users']
-			doc = {"_id": _id, "name": name, "password": pwd}
+			doc = {"_id": _id, "name": name, "password": pwd, "organization": {}}
 			new_doc = my_database.create_document(doc)
 			if new_doc.exists():
 				request.session['authcode'] = 2
-				return HttpResponseRedirect("/login?redirect=/home")
+				return HttpResponseRedirect("/login?redirect=/profile")
 			else:
 				request.session['authcode'] = 3
 				return HttpResponseRedirect("/register/user")
@@ -162,7 +161,7 @@ class RegisterOrg(View):
 
 			if new_doc.exists():
 				request.session['authcode'] = 2
-				return HttpResponseRedirect("/login?redirect=/home")
+				return HttpResponseRedirect("/login?redirect=/profile")
 			else:
 				request.session['authcode'] = 3
 				return HttpResponseRedirect("/register/organization")

@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from OnlineRecruitmentSoftware import connection
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 # Create your views here.
 
@@ -19,10 +20,73 @@ def home(request):
 	# client = Cloudant(cloudant_user, cloudant_pass, url=cloudant_url, connect=True, auto_renew=True)
 	# my_database = client['users']
 
-	context = {}
+	context = {"name": ''}
 	
 	if 'name' in request.session:
-		context['name'] = request.session['name']
-	else:
-		context['name'] = ''
-	return render(request, "home.html", context)
+		return HttpResponseRedirect("/profile")
+
+	return render(request, "home/home.html", context)
+
+def profile(request):
+
+	context = {"name": '', "is_org": False}
+	
+	if 'user_id' in request.session:
+		client = connection.create()
+		
+		my_database = None
+		if 'user_type' in request.session:
+			if request.session['user_type'] == 'O':
+				my_database = client['organization']
+				context['is_org'] = True
+			else:
+				my_database = client['users']
+
+		for doc in my_database:
+			pass
+
+		user_id = request.session['user_id']
+
+		if user_id in my_database:
+			user = my_database[user_id]
+			if request.session['user_type'] == 'O':
+				context['org'] = user
+			else:
+				context['user'] = user
+				orgs = client['organization']
+
+				for doc in orgs:
+					pass
+
+				if 	user['organization'] in orgs:
+					org = orgs[user['organization']]
+					context['user_org'] = org['name']
+
+			context['user_email'] = user['_id']
+
+			if 'addcode' in request.session:
+				add = request.session['addcode']
+
+				if add == 0:
+					context['alert'] = 'danger'
+					context['alertmessage'] = 'Something Looks Wrong'
+				elif add == 1:
+					context['alert'] = 'success'
+					context['alertmessage'] = 'Added Successfully'
+				elif add == 2:
+					context['alert'] = 'danger'
+					context['alertmessage'] = 'User Does not Exist'
+				elif add == 3:
+					context['alert'] = 'danger'
+					context['alertmessage'] = 'User Already linked to some Organization'
+
+				del request.session['addcode']
+
+			return render(request, "home/profile.html", context)
+		else:
+			del request.session['user_id']
+			del request.session['user_type']
+			request.session['authcode'] = 0
+			return HttpResponseRedirect("/login?redirect=/profile")
+
+	return HttpResponseRedirect("/login?redirect=/profile")

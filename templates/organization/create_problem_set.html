@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Problem Set{% endblock %}
+
+{% block headcss %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'home/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="#">ASSESS</a>
+		</div>
+		<ul class="nav navbar-nav">
+			<!-- <li class="active"><a href="#">Home</a></li> -->
+		</ul>
+		<ul class="nav navbar-nav navbar-right">
+			<li class="dropdown">
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ org.name }} 
+					<span class="caret"></span>
+				</a>
+				<ul class="dropdown-menu">
+					<li><a href="/logout?redirect=/"> Logout </a></li>
+				</ul>
+			</li>
+		</ul>
+	</div>
+</nav>
+
+{% if is_org %}
+
+<div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
+	<div class="row">
+		{% if alert %}
+		<div class="alert alert-{{alert}}"> {{alertmessage}} </div> <br>
+		{% endif %}
+		<div id="add_emp">
+			Add Employee
+		</div>
+		<form method="post" action="/organization/addemployee"> {% csrf_token %}
+			<div class="form-group">
+				<label for="emp_type">Category</label>
+				<select required="required" class="form-control" id="emp_type" name="emp_type">
+					<option selected="selected" value="GN">General</option>
+					<option value="HR">HR Head</option>
+					<option value="PS Setter">Problem Setter</option>
+					<option value="SU">Supervisor</option>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="emp_email">Email</label>
+				<input required="required" type="email" name="emp_email" class="form-control" id="emp_email" placeholder="ex: johndoe@companydomain.com">
+			</div>
+			<button type="submit" class="btn btn-primary">Add</button>
+		</form>
+	</div>
+</div>
+
+{% else %}
+
+<div class="container-fluid" id="banner">
+	<div class="row">
+		<div class="col-sm-10 col-sm-push-1"  id="banner-internal">
+			<div id="welcome">Welcome</div><div id="username"> {{user.name}} </div>
+		</div>
+	</div>
+</div>
+
+{% endif %}
+
+{% endblock %}

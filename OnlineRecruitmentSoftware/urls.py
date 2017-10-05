@@ -18,9 +18,10 @@ from django.views import View
 from django.conf import settings
 from django.conf.urls.static import static
 
-from home.views import home
+from home.views import home, profile
 from login.views import LoginHandler, LogoutHandler, RegisterUser, RegisterOrg
 from admin.views import AdminLogin, AdminLogout, AdminProfile, VerifyOrganization
+from organization.views import add_employee, CreateProblemSet
 
 
 urlpatterns = [
@@ -33,6 +34,9 @@ urlpatterns = [
     url(r'^logout$', LogoutHandler.as_view()),
     url(r'^register/user$', RegisterUser.as_view()),
     url(r'^register/organization$', RegisterOrg.as_view()),
+    url(r'^profile$', profile),
+    url(r'^organization/add-employee$', add_employee),
+    url(r'^organization/create-problem-set$', CreateProblemSet.as_view()),
 ]
 
 if settings.DEBUG:
