@@ -15,7 +15,7 @@
 			<a class="navbar-brand" href="#">ASSESS</a>
 		</div>
 		<ul class="nav navbar-nav">
-			<li><a href="/organization/create-problem-set">New Problem Set</a></li>
+			<li><a href="/organization/create-problem-set">Create Problem Set</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li class="dropdown">
@@ -36,7 +36,7 @@
 {% endif %}
 
 <div class="col-xs-12" id="title">
-	<h3>Create Problem Sets</h3>
+	<h3>New Problem Set</h3>
 </div>
 <br>
 <br>
@@ -87,7 +87,7 @@
 
 			noq = noq+1;
 
-			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'>"+noq+"</div><input type='hidden' name='q"+noq+"t' value='OBJ'><div class='form-group'><label>Question Type : Objective</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><input class='form-control' type='text' name='q"+noq+"q' id='q"+noq+"q' required></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div><div class='col-xs-12 type-specific' id='q"+noq+"ts'><div class='row'><input type='hidden' class='qno' value='"+noq+"'><div class='form-group'><label for='q"+noq+"noo'>No Of Options <span class='red'>*</span> </label><br><input type='number' class='no-of-option' onchange='change_no_of_option(this)' value='3' min='1' max='5' name='q"+noq+"noo' id='q"+noq+"noo' required></div><div class='col-xs-12 option-list'><div class='row'><label>Options <span class='red'>*</span></label><br><input class='form-control' type='text' required name='q"+noq+"o1' id='q"+noq+"o1' placeholder='Option 1'><br><input class='form-control' type='text' required name='q"+noq+"o2' id='q"+noq+"o2' placeholder='Option 2'><br><input class='form-control' type='text' required name='q"+noq+"o3' id='q"+noq+"o3' placeholder='Option 3'><br></div></div><div class='form-group'><label for='q"+noq+"co'>Correct Option <span class='red'>*</span> </label><br><input class='max-value' type='number' min='1' max='5' name='q"+noq+"co' id='q"+noq+"co' required></div><div class='form-group'><label for='q"+noq+"marks'>Marks <span class='red'>*</span></label><br><input type='text' name='q"+noq+"marks' id='q"+noq+"marks' required></div></div></div></div></div>");
+			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'><div class='qidentifier'>"+noq+"</div></div><input type='hidden' name='q"+noq+"t' value='OBJ'><div class='form-group'><label>Question Type : Objective</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><input class='form-control' type='text' name='q"+noq+"q' id='q"+noq+"q' required></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div><div class='col-xs-12 type-specific' id='q"+noq+"ts'><div class='row'><input type='hidden' class='qno' value='"+noq+"'><div class='form-group'><label for='q"+noq+"noo'>No Of Options <span class='red'>*</span> </label><br><input type='number' class='no-of-option' onchange='change_no_of_option(this)' value='3' min='1' max='5' name='q"+noq+"noo' id='q"+noq+"noo' required></div><div class='col-xs-12 option-list'><div class='row'><label>Options <span class='red'>*</span></label><br><input class='form-control' type='text' required name='q"+noq+"o1' id='q"+noq+"o1' placeholder='Option 1'><br><input class='form-control' type='text' required name='q"+noq+"o2' id='q"+noq+"o2' placeholder='Option 2'><br><input class='form-control' type='text' required name='q"+noq+"o3' id='q"+noq+"o3' placeholder='Option 3'><br></div></div><div class='form-group'><label for='q"+noq+"co'>Correct Option <span class='red'>*</span> </label><br><input class='max-value' type='number' min='1' max='5' name='q"+noq+"co' id='q"+noq+"co' required></div><div class='form-group'><label for='q"+noq+"marks'>Marks <span class='red'>*</span></label><br><input type='text' name='q"+noq+"marks' id='q"+noq+"marks' required></div></div></div></div></div>");
 
 			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
 			$('#question-list').append(question);
@@ -99,7 +99,7 @@
 
 			noq = noq+1;
 
-			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'>"+noq+"</div><input type='hidden' name='q"+noq+"t' value='SUB'><div class='form-group'><label>Question Type : Subjective</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><input class='form-control' type='text' name='q"+noq+"q' id='q"+noq+"q' required></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div></div></div>");
+			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'><div class='qidentifier'>"+noq+"</div></div><input type='hidden' name='q"+noq+"t' value='SUB'><div class='form-group'><label>Question Type : Subjective</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><input class='form-control' type='text' name='q"+noq+"q' id='q"+noq+"q' required></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div></div></div>");
 
 			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
 			$('#question-list').append(question);			
@@ -110,7 +110,7 @@
 
 			noq = noq+1;
 
-			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'>"+noq+"</div><input type='hidden' name='q"+noq+"t' value='COD'><div class='form-group'><label>Question Type : Coding</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><textarea class='form-control' name='q"+noq+"q' id='q"+noq+"q' required></textarea></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div><div class='col-xs-12 type-specific' id='q"+noq+"ts'><div class='row'><div class='form-group'><label for='q"+noq+"si'>Input </label><br><textarea class='form-control' name='q"+noq+"si' id='q"+noq+"si'></textarea></div><div class='form-group'><label for='q"+noq+"so'>Output <span class='red'>*</span></label><br><textarea class='form-control' name='q"+noq+"so' id='q"+noq+"so'></textarea></div><div class='form-group'><label for='q"+noq+"tl'>Time Limit ( in secs ) <span class='red'>*</span></label><br><input type='text' name='q"+noq+"tl' id='q"+noq+"tl' required></div><div class='form-group'><label for='q"+noq+"marks'>Marks <span class='red'>*</span></label><br><input type='text' name='q"+noq+"marks' id='q"+noq+"marks' required></div></div></div></div></div>");
+			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'><div class='qidentifier'>"+noq+"</div></div><input type='hidden' name='q"+noq+"t' value='COD'><div class='form-group'><label>Question Type : Coding</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><textarea class='form-control' name='q"+noq+"q' id='q"+noq+"q' required></textarea></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div><div class='col-xs-12 type-specific' id='q"+noq+"ts'><div class='row'><div class='form-group'><label for='q"+noq+"si'>Input </label><br><textarea class='form-control' name='q"+noq+"si' id='q"+noq+"si'></textarea></div><div class='form-group'><label for='q"+noq+"so'>Output <span class='red'>*</span></label><br><textarea class='form-control' name='q"+noq+"so' id='q"+noq+"so'></textarea></div><div class='form-group'><label for='q"+noq+"tl'>Time Limit ( in secs ) <span class='red'>*</span></label><br><input type='text' name='q"+noq+"tl' id='q"+noq+"tl' required></div><div class='form-group'><label for='q"+noq+"marks'>Marks <span class='red'>*</span></label><br><input type='text' name='q"+noq+"marks' id='q"+noq+"marks' required></div></div></div></div></div>");
 
 			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
 			$('#question-list').append(question);

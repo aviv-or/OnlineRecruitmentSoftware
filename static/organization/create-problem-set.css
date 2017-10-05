@@ -29,3 +29,17 @@
 	padding: 10px 30px 0px 30px;
 	margin: 10px 0px;
 }
+
+.qidentifier
+{
+	background-color: #ecf0f1;
+	height: 40px;
+	width: 40px;
+	font-size: 16px;
+	text-align: center;
+	padding: 12px 0px;
+}
+
+input{
+	border-radius: 0px
+}
