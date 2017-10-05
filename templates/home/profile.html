@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}Profile{% endblock %}
 
 {% block headcss %}
 {% load static %}
@@ -11,8 +11,8 @@
 
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
-		<div class="navbar-header">
-			<a class="navbar-brand" href="#">ASSESS</a>
+		<div class="navbar-header" id="brand">
+			<a class="navbar-brand" href="#">skillmagnet</a>
 		</div>
 		<ul class="nav navbar-nav">
 			{% if not is_org and user.role == "PS" %}

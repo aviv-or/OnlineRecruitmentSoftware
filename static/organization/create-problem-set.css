@@ -4,6 +4,16 @@
 	font-size: 14px;
 }
 
+#brand {
+	font-family: 'Orbitron', sans-serif;
+	letter-spacing: 3px;
+}
+
+.navbar-brand{
+	font-family: 'Orbitron', sans-serif;
+	letter-spacing: 3px;
+}
+
 .btn-internal {
 	padding: 0px 30px 0px 30px;
 }
