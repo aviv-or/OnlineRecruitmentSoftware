@@ -4,7 +4,7 @@
 
 {% block headcss %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'home/profile.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'organization/create-problem-set.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -15,14 +15,15 @@
 			<a class="navbar-brand" href="#">ASSESS</a>
 		</div>
 		<ul class="nav navbar-nav">
-			<!-- <li class="active"><a href="#">Home</a></li> -->
+			<li><a href="/organization/create-problem-set">Create Problem Set</a></li>
 		</ul>
 		<ul class="nav navbar-nav navbar-right">
 			<li class="dropdown">
-				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ org.name }} 
+				<a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ user.name }}
 					<span class="caret"></span>
 				</a>
 				<ul class="dropdown-menu">
+					<li><a href="/profile"> Profile </a></li>
 					<li><a href="/logout?redirect=/"> Logout </a></li>
 				</ul>
 			</li>
@@ -30,45 +31,106 @@
 	</div>
 </nav>
 
-{% if is_org %}
-
-<div class="col-xs-10 col-xs-push-1 col-md-8 col-md-push-2">
-	<div class="row">
-		{% if alert %}
-		<div class="alert alert-{{alert}}"> {{alertmessage}} </div> <br>
-		{% endif %}
-		<div id="add_emp">
-			Add Employee
-		</div>
-		<form method="post" action="/organization/addemployee"> {% csrf_token %}
+<div class="col-xs-12" id="title">
+	<h3>Create Problem Sets</h3>
+</div>
+<br>
+<br>
+<br>
+<div class="col-xs-12 col-md-8" id="form-wrapper">
+	<div class="row form-internal">
+		<form id="problem-set" method="post" action="/organization/create-problem-set"> {% csrf_token %}
 			<div class="form-group">
-				<label for="emp_type">Category</label>
-				<select required="required" class="form-control" id="emp_type" name="emp_type">
-					<option selected="selected" value="GN">General</option>
-					<option value="HR">HR Head</option>
-					<option value="PS Setter">Problem Setter</option>
-					<option value="SU">Supervisor</option>
-				</select>
+				<label for="ps_name">Problem Set Name <span class="red">*</span> </label>
+				<input class="form-control" type="text" name="ps_name" id="ps_name" required="required">
 			</div>
-			<div class="form-group">
-				<label for="emp_email">Email</label>
-				<input required="required" type="email" name="emp_email" class="form-control" id="emp_email" placeholder="ex: johndoe@companydomain.com">
+			<div class="col-xs-12">
+				<div class="row"  id="question-list">
+					<input type="hidden" value="0" name="noq">
+				</div>
 			</div>
-			<button type="submit" class="btn btn-primary">Add</button>
 		</form>
 	</div>
 </div>
 
-{% else %}
-
-<div class="container-fluid" id="banner">
-	<div class="row">
-		<div class="col-sm-10 col-sm-push-1"  id="banner-internal">
-			<div id="welcome">Welcome</div><div id="username"> {{user.name}} </div>
-		</div>
+<div class="col-xs-12 col-md-2 col-md-push-1" id="btn-wrapper">
+	<div class="row btn-internal">
+		<button id="btn-save" class="btn btn-block btn-default">Save</button><br>
+		<form method="get" action="/profile" ><button type="submit" id="btn-cancel" class="btn btn-block btn-default">Cancel</button></form>
+		<br><br>
+		<label class="col-xs-12" style="text-align:center;">Add Question</label>
+		<br>
+		<br>
+		<button id="create-objective" class="btn btn-block btn-default">Objective</button>
+		<button id="create-subjective" class="btn btn-block btn-default">Subjective</button>
+		<button id="create-coding" class="btn btn-block btn-default">Coding</button>
 	</div>
 </div>
 
-{% endif %}
+{% endblock %}
+
+{% block bodyjs %}
+
+<script type="text/javascript">
+	var noq = 0;
+	$( document ).ready(function(){
+
+		$('#btn-save').on('click',function(){
+			$('#problem-set').submit();
+		});
+
+		$('#create-objective').click(function(){
+
+			noq = noq+1;
+
+			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'>"+noq+"</div><div class='form-group'><label>Question Type : Objective</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><input class='form-control' type='text' name='q"+noq+"q' id='q"+noq+"q' required></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div><div class='col-xs-12 type-specific' id='q"+noq+"ts'><div class='row'><input type='hidden' class='qno' value='"+noq+"'><div class='form-group'><label for='q"+noq+"noo'>No Of Options <span class='red'>*</span> </label><br><input type='number' class='no-of-option' onchange='change_no_of_option(this)' value='3' min='1' max='5' name='q"+noq+"noo' id='q"+noq+"noo' required></div><div class='col-xs-12 option-list'><div class='row'><label>Options <span class='red'>*</span></label><br><input class='form-control' type='text' required name='q"+noq+"o1' id='q"+noq+"o1' placeholder='Option 1'><br><input class='form-control' type='text' required name='q"+noq+"o2' id='q"+noq+"o2' placeholder='Option 2'><br><input class='form-control' type='text' required name='q"+noq+"o3' id='q"+noq+"o3' placeholder='Option 3'><br></div></div><div class='form-group'><label for='q"+noq+"co'>Correct Option <span class='red'>*</span> </label><br><input class='max-value' type='number' min='1' max='5' name='q"+noq+"co' id='q"+noq+"co' required></div><div class='form-group'><label for='q"+noq+"marks'>Marks <span class='red'>*</span></label><br><input type='text' name='q"+noq+"marks' id='q"+noq+"marks' required></div></div></div></div></div>");
+
+			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+			$('#question-list').append(question);
+			$('input[name=noq]').val(noq);
+
+		});
+
+		$('#create-subjective').click(function(){
+
+			noq = noq+1;
+
+			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'>"+noq+"</div><div class='form-group'><label>Question Type : Subjective</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><input class='form-control' type='text' name='q"+noq+"q' id='q"+noq+"q' required></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div></div></div>");
+
+			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+			$('#question-list').append(question);			
+			$('input[name=noq]').val(noq);
+		});
+
+		$('#create-coding').click(function(){
+
+			noq = noq+1;
+
+			var question = $("<div class='col-xs-12 question' id='q"+noq+"'><div class='row'><div class='q"+noq+"n'>"+noq+"</div><div class='form-group'><label>Question Type : Coding</label></div><div class='form-group'><label for='q"+noq+"q'>Question <span class='red'>*</span> </label><textarea class='form-control' name='q"+noq+"q' id='q"+noq+"q' required></textarea></div><div class='form-group'><label for='q"+noq+"tag'>Tag </label><input class='form-control' type='text' name='q"+noq+"tag' id='q"+noq+"tag'></div><div class='col-xs-12 type-specific' id='q"+noq+"ts'><div class='row'><div class='form-group'><label for='q"+noq+"si'>Sample Input </label><br><textarea class='form-control' name='q"+noq+"si' id='q"+noq+"si'></textarea></div><div class='form-group'><label for='q"+noq+"so'>Sample Output <span class='red'>*</span></label><br><textarea class='form-control' name='q"+noq+"so' id='q"+noq+"so'></textarea></div><div class='form-group'><label for='q"+noq+"tl'>Time Limit ( in secs ) <span class='red'>*</span></label><br><input type='text' name='q"+noq+"tl' id='q"+noq+"tl' required></div><div class='form-group'><label for='q"+noq+"marks'>Marks <span class='red'>*</span></label><br><input type='text' name='q"+noq+"marks' id='q"+noq+"marks' required></div></div></div></div></div>");
+
+			$("html, body").animate({ scrollTop: $(document).height() }, "slow");
+			$('#question-list').append(question);
+			$('input[name=noq]').val(noq);
+		});
+	});
+
+	function change_no_of_option(tar){
+		console.log("running")
+		var option_list = $(tar).parent().parent().find(".option-list");
+		var noo = $(tar).val()
+		var ques = $(tar).parent().parent().find(".qno").val();
+		console.log(noo+" , "+ques);
+		console.log(option_list);
+		$(tar).parent().parent().find(".max-value").attr("max",noo);
+		option_inner = "<div class='row'><label>Options <span class='red'>*</span></label><br>";
+		for( i = 1 ; i<=noo ; i++)
+		{
+			option_inner += "<input class='form-control' type='text' required name='q"+ques+"o"+i+"' id='q"+ques+"o"+i+"' placeholder='Option "+i+"'><br>";
+		}
+		option_inner += "</div>";
+		console.log(option_inner);
+		option_list.html(option_inner);
+	}
+</script>
 
 {% endblock %}

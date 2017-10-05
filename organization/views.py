@@ -99,12 +99,14 @@ class CreateProblemSet(View):
 		for doc in users:
 			pass
 
-		if 'user_id' not in users:
+		if user_id not in users:
 			return HttpResponseRedirect("/profile")
 
 		user = users[user_id]
 
 		if user['role'] != 'PS':
 			return HttpResponseRedirect("/profile")
+
+		context['user'] = user
 
 		return render(request, "organization/create_problem_set.html", context)
