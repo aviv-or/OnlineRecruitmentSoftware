@@ -47,7 +47,7 @@ class LoginHandler(View):
 
 		print(request.POST)
 
-		redirect = '/'
+		redirect = '/profile'
 		if 'redirect' in request.POST:
 			redirect = request.POST['redirect']
 			

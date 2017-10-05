@@ -20,12 +20,25 @@ def home(request):
 	# client = Cloudant(cloudant_user, cloudant_pass, url=cloudant_url, connect=True, auto_renew=True)
 	# my_database = client['users']
 
-	context = {"name": ''}
-	
-	if 'name' in request.session:
-		return HttpResponseRedirect("/profile")
+	if 'user_id' in request.session:
+		client = connection.create()
+		
+		my_database = None
+		if 'user_type' in request.session:
+			if request.session['user_type'] == 'O':
+				my_database = client['organization']
+			else:
+				my_database = client['users']
 
-	return render(request, "home/home.html", context)
+		for doc in my_database:
+			pass
+
+		user_id = request.session['user_id']
+
+		if user_id in my_database:
+			return HttpResponseRedirect("/profile")
+
+	return render(request, "home/home.html", {})
 
 def profile(request):
 
