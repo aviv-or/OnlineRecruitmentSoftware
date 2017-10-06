@@ -10,6 +10,8 @@ authcode
 1: Wrong Username or Password
 2: Registered Sucessfull
 4: Organization Not Yet Verified
+5: User already Exists
+6: Organization already Exists
 """
 
 class LoginHandler(View):
@@ -36,6 +38,10 @@ class LoginHandler(View):
 			elif request.session["authcode"] == 4:
 				context['alert'] = 'warning'
 				context["alertmessage"] = "Organization Not Yet Verified"
+
+			elif request.session["authcode"] == 4:
+				context['alert'] = 'warning'
+				context["alertmessage"] = "User Already Exists"
 			
 			del request.session['authcode']
 		else:
@@ -102,7 +108,18 @@ class LogoutHandler(View):
 
 class RegisterUser(View):
 	def get(self,request):
-		return render(request, "register/registeruser.html", {})
+		context = {}
+		if 'authcode' in request.session:
+			if request.session["authcode"] == 0:
+				context['alert'] = 'danger'
+				context["alertmessage"] = "Something looks Wrong"
+
+			elif request.session["authcode"] == 5:
+				context['alert'] = 'danger'
+				context["alertmessage"] = "User Already Exists"
+			
+			del request.session['authcode']
+		return render(request, "register/registeruser.html", context)
 
 	def post(self, request):
 		data = request.POST
@@ -113,6 +130,14 @@ class RegisterUser(View):
 			pwd = authhelper.crypt(data['pwd'])
 			client = connection.create()
 			my_database = client['users']
+			
+			for doc in my_database:
+				pass
+
+			if _id in my_database:
+				request.session['authcode'] = 5
+				return HttpResponseRedirect("/register/user")
+
 			doc = {"_id": _id, "name": name, "password": pwd, "organization": {}}
 			new_doc = my_database.create_document(doc)
 			if new_doc.exists():
@@ -128,7 +153,18 @@ class RegisterUser(View):
 
 class RegisterOrg(View):
 	def get(self,request):
-		return render(request, "register/registerorg.html", {})
+		context = {}
+		if 'authcode' in request.session:
+			if request.session["authcode"] == 0:
+				context['alert'] = 'danger'
+				context["alertmessage"] = "Something looks Wrong"
+
+			elif request.session["authcode"] == 6:
+				context['alert'] = 'danger'
+				context["alertmessage"] = "Organization Already Exists"
+			
+			del request.session['authcode']
+		return render(request, "register/registerorg.html", context)
 
 	def post(self, request):
 
@@ -146,6 +182,13 @@ class RegisterOrg(View):
 			client = connection.create()
 			my_database = client['organization']
 
+			for doc in my_database:
+				pass
+
+			if _id in my_database:
+				request.session['authcode'] = 6
+				return HttpResponseRedirect("/register/organization")
+			
 			doc = {
 				"_id": _id,
 				"name": name,
@@ -163,7 +206,7 @@ class RegisterOrg(View):
 				request.session['authcode'] = 2
 				return HttpResponseRedirect("/login?redirect=/profile")
 			else:
-				request.session['authcode'] = 3
+				request.session['authcode'] = 0
 				return HttpResponseRedirect("/register/organization")
 
 		else:
