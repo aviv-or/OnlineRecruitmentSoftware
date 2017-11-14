@@ -1,214 +1,146 @@
 from django.shortcuts import render
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.views import View
-from OnlineRecruitmentSoftware import connection, authhelper
 
-"""
-authcode
+from default import LoginType, LOGIN_ID, LOGIN_TYPE, AUTH_RESULT
+from db import authhelper
+from db.user_database import UserDB
+from db.organization_database import OrganizationDB
+from entities.user import User
+from entities.organization import Organization
 
-0: Something Else
-1: Wrong Username or Password
-2: Registered Sucessfull
-4: Organization Not Yet Verified
-5: User already Exists
-6: Organization already Exists
-"""
+from result import LoginResult, RegisterResult
 
 class LoginHandler(View):
 	def get(self,request):
-		context = {}
-		if 'redirect' in request.GET:
-			context["redirect"] = request.GET['redirect']
-		else:
-			context["redirect"] = '/profile'
+		profile = request.GET.get('r',"/profile")
+		context = {'redirect': profile}
+		session = request.session
 
-		if 'authcode' in request.session:
-			if request.session["authcode"] == 0:
-				context['alert'] = 'danger'
-				context["alertmessage"] = "Something looks Wrong"
+		if LOGIN_ID in session:
+			if LOGIN_TYPE in session:
+				return HttpResponseRedirect(profile)
+			else:
+				del request.session[LOGIN_ID]
 
-			elif request.session["authcode"] == 1:
-				context['alert'] = 'danger'
-				context["alertmessage"] = "Wrong Username or Password"
+		if LOGIN_TYPE in session:
+			del session[LOGIN_TYPE]
 
-			elif request.session["authcode"] == 2:
-				context['alert'] = 'success'
-				context["alertmessage"] = "Registration was successful! Log In to Continue"
-
-			elif request.session["authcode"] == 4:
-				context['alert'] = 'warning'
-				context["alertmessage"] = "Organization Not Yet Verified"
-
-			elif request.session["authcode"] == 4:
-				context['alert'] = 'warning'
-				context["alertmessage"] = "User Already Exists"
-			
-			del request.session['authcode']
-		else:
-			context["alert"] = False
+		if AUTH_RESULT in session:
+			alert = session[AUTH_RESULT]
+			context['alert'] = alert
+			del session[AUTH_RESULT]
 
 		return render(request, "login/login.html", context)
 
 	def post(self,request):
 
-		print(request.POST)
+		data = request.POST
+		redirect = data.get('r','/profile')
+		email = data.get('email')
+		pwd = data.get('pwd')
 
-		redirect = '/profile'
-		if 'redirect' in request.POST:
-			redirect = request.POST['redirect']
-			
-		if 'email' in request.POST and 'pwd' in request.POST:
+		if not email or not pwd:
+			request.session[AUTH_RESULT] = LoginResult.SOMETHING_ELSE
+			return HttpResponseRedirect("/login?r="+redirect)
 
-			pwd = authhelper.crypt(request.POST['pwd'])
-			email = request.POST['email']
-			client = connection.create()
-			is_org = False
-			if 'org' in request.POST:
-				my_database = client['organization']
-				is_org = True
-			else:
-				my_database = client['users']
+		if data.get('org'):
+			org = OrganizationDB.organization(email = email, password = pwd)
 
-			for doc in my_database:
-				pass
+			if not org.valid():
+				request.session[AUTH_RESULT] = LoginResult.WRONG_USERNAME_OR_PASSWORD.value
+				return HttpResponseRedirect("/login?r="+redirect)
 
-			if email in my_database:
-				doc = my_database[email]
-				if is_org:
-					if not doc['verified']:
-						request.session['authcode'] = 4
-						return HttpResponseRedirect("/login?redirect="+redirect)
+			if not org.verified():
+				request.session[AUTH_RESULT] = LoginResult.ORGANIZATION_NOT_VERIFIED.value
+				return HttpResponseRedirect("/login?r="+redirect)
 
-				if doc['password'] == pwd:
-					request.session['user_id'] = doc['_id']
-					if is_org:
-						request.session['user_type'] = 'O'
-					else:
-						request.session['user_type'] = 'U'
-					return HttpResponseRedirect(redirect)
+			request.session[LOGIN_ID] = org['_id']
+			request.session[LOGIN_TYPE] = LoginType.ORG
+			return HttpResponseRedirect(redirect)
 
-			request.session['authcode'] = 1
-			return HttpResponseRedirect("/login?redirect="+redirect)
+		else:
+			user = UserDB.user(email = email, password = pwd)
 
-		request.session['authcode'] = 0
-		return HttpResponseRedirect("/login?redirect="+redirect)
+			if not user.valid():
+				request.session[AUTH_RESULT] = LoginResult.WRONG_USERNAME_OR_PASSWORD.value
+				return HttpResponseRedirect("/login?r="+redirect)
+
+			request.session[LOGIN_ID] = user['_id']
+			request.session[LOGIN_TYPE] = LoginType.EMP
+			return HttpResponseRedirect(redirect)
 
 class LogoutHandler(View):
 	def get(self,request):
 		redirect = '/'
-		if 'redirect' in request.GET:
-			redirect = request.GET['redirect']
+		if "r" in request.GET:
+			redirect = request.GET["r"]
 
-		if 'user_type' in request.session:
-			del request.session['user_type']
-		if 'user_id' in request.session:
-			del request.session['user_id']
+		if LOGIN_TYPE in request.session:
+			del request.session[LOGIN_TYPE]
+		if LOGIN_ID in request.session:
+			del request.session[LOGIN_ID]
 
 		return HttpResponseRedirect(redirect)
 
 class RegisterUser(View):
 	def get(self,request):
 		context = {}
-		if 'authcode' in request.session:
-			if request.session["authcode"] == 0:
-				context['alert'] = 'danger'
-				context["alertmessage"] = "Something looks Wrong"
-
-			elif request.session["authcode"] == 5:
-				context['alert'] = 'danger'
-				context["alertmessage"] = "User Already Exists"
+		if AUTH_RESULT in request.session:
+			context['alert'] = request.session[AUTH_RESULT]
 			
-			del request.session['authcode']
+			del request.session[AUTH_RESULT]
 		return render(request, "register/registeruser.html", context)
 
 	def post(self, request):
 		data = request.POST
+		udata = {}
+		udata['name'] = data.get('name')
+		udata['email'] = data.get('email')
+		udata['password'] = data.get('pwd')
 
-		if 'name' in data and 'email' in data and 'pwd' in data:
-			name = data['name']
-			_id = data['email']
-			pwd = authhelper.crypt(data['pwd'])
-			client = connection.create()
-			my_database = client['users']
-			
-			for doc in my_database:
-				pass
+		result, user = UserDB.create(udata)
+		if result:
+			request.session[AUTH_RESULT] = RegisterResult.NONE.value
+			return HttpResponseRedirect("/login?r=/profile")				
 
-			if _id in my_database:
-				request.session['authcode'] = 5
-				return HttpResponseRedirect("/register/user")
-
-			doc = {"_id": _id, "name": name, "password": pwd, "organization": {}}
-			new_doc = my_database.create_document(doc)
-			if new_doc.exists():
-				request.session['authcode'] = 2
-				return HttpResponseRedirect("/login?redirect=/profile")
-			else:
-				request.session['authcode'] = 3
-				return HttpResponseRedirect("/register/user")
-
-		else:
-			request.session['authcode'] = 0
+		elif user.error == User.Error.EMAIL_ALREADY_EXISTS:
+			request.session[AUTH_RESULT] = RegisterResult.EMAIL_ALREADY_EXISTS.value
 			return HttpResponseRedirect("/register/user")
+
+		request.session[AUTH_RESULT] = RegisterResult.SOMETHING_ELSE.value
+		return HttpResponseRedirect("/register/user")
 
 class RegisterOrg(View):
 	def get(self,request):
 		context = {}
-		if 'authcode' in request.session:
-			if request.session["authcode"] == 0:
-				context['alert'] = 'danger'
-				context["alertmessage"] = "Something looks Wrong"
-
-			elif request.session["authcode"] == 6:
-				context['alert'] = 'danger'
-				context["alertmessage"] = "Organization Already Exists"
-			
-			del request.session['authcode']
+		if AUTH_RESULT in request.session:
+			context['alert'] = request.session[AUTH_RESULT]
+			del request.session[AUTH_RESULT]
 		return render(request, "register/registerorg.html", context)
 
 	def post(self, request):
-
 		data = request.POST
-		if 'name' in data and 'description' in data and 'website' in data and 'location' in data and 'category' in data and 'email' in data and 'pwd' in data :
-			_id = data['email']
-			name = data['name']
-			desc = data['description']
-			website = data['website']
-			location = data['location']
-			category = data['category']
+		odata = {}
+		odata['name'] = data.get('name')
+		odata['email'] = data.get('email')
+		odata['password'] = data.get('pwd')
+		odata['website'] = data.get('website')
+		odata['location'] = data.get('location')
+		odata['description'] = data.get('description')
+		odata['category'] = data.get('category')
 
-			pwd = authhelper.crypt(data['pwd'])
+		result, org = OrganizationDB.create(odata)
+		print(result)
+		print(org)
 
-			client = connection.create()
-			my_database = client['organization']
+		if result:
+			request.session[AUTH_RESULT] = RegisterResult.NONE.value
+			return HttpResponseRedirect("/login?r=/profile")
 
-			for doc in my_database:
-				pass
-
-			if _id in my_database:
-				request.session['authcode'] = 6
-				return HttpResponseRedirect("/register/organization")
-			
-			doc = {
-				"_id": _id,
-				"name": name,
-				"description": desc,
-				"website": website,
-				"location": location,
-				"Category": category,
-				"password": pwd,
-				"verified": False
-				}
-
-			new_doc = my_database.create_document(doc)
-
-			if new_doc.exists():
-				request.session['authcode'] = 2
-				return HttpResponseRedirect("/login?redirect=/profile")
-			else:
-				request.session['authcode'] = 0
-				return HttpResponseRedirect("/register/organization")
-
-		else:
-			request.session['authcode'] = 0
+		elif org.error == Organization.Error.EMAIL_ALREADY_EXISTS:
+			request.session[AUTH_RESULT] = RegisterResult.EMAIL_ALREADY_EXISTS.value
 			return HttpResponseRedirect("/register/organization")
+
+		request.session[AUTH_RESULT] = RegisterResult.SOMETHING_ELSE.value
+		return HttpResponseRedirect("/register/organization")

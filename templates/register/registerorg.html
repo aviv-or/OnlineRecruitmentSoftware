@@ -13,8 +13,8 @@
 		<div class="col-sm-10 col-sm-push-1" id="register_box_internal">
 			<span id="register_title"><h3>Register as Organization</h3></span><br>
 			{% if alert %}
-			<div class="alert alert-{{ alert }}">
-				{{ alertmessage }}
+			<div class="alert alert-{{ alert.type }}">
+				{{ alert.message }}
 			</div>
 			{% endif %}
 			<form method="post" action="/register/organization"> {% csrf_token %}

@@ -1,0 +1,663 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Problem Set{% endblock %}
+
+{% block headcss %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'employee/test-module.css' %}">
+{% endblock %}
+
+{% block content %}
+{% load static %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
+            <a class="navbar-brand" href="#">
+                Hiresome
+            </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ user.name }}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/profile"> Profile </a></li>
+                    <li><a href="/logout?redirect=/"> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div id="pset-window-frame">
+<div class="col-xs-11" id="pset-window">
+    <div class="row">
+        <div id="pset-window-close-btn">
+            <span class="ti-close"></span>
+        </div>
+        <div class="col-xs-12 col-md-4 col-lg-2" id="pset-search-box">
+            <div id="pset-search-box-head">
+               <span class="ti-search"></span> Search
+            </div>
+            <div id="pset-search-form">
+                <div class="field-label">Search Key</div>
+                <div class="form-field col-xs-12">
+                    <select id="search_key" class="field-select">
+                        <option selected value="name">Name</option>
+                        <option value="category">Category</option>
+                    </select>
+                </div>
+                <br><br><br>
+                <div class="field-label">Search Keyword</div>
+                <div class="form-field col-xs-12">
+                    <div class="field-icon"><span class="ti-search"></span></div>
+                    <input id="search_keyword" type="text" placeholder="ex: Algorithm" class="field-input">
+                    <div class="field-clear"><span class="ti-close"></span></div>
+                </div>
+                <br><br>
+                <div class="form-field col-xs-12">
+                    <label><input id="search_public" type="checkbox" value="true"> Public </label>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-12 col-md-8 col-lg-10" id="pset-directory">
+            <div class="row" id="pset-path">
+                <span id="pset-head">
+                    Problem Sets
+                </span>
+            </div>
+            <div class="row" id="pset-list-view"></div>
+            <div class="row" id="pset-view"></div>
+        </div>
+    </div>
+</div>
+</div>
+
+<div class="col-xs-12 help-info">
+    <div class="row">
+        <div class="col-xs-1 help-icon-col">
+            <span class="ti-info-alt"></span>
+        </div>
+        <div class="col-xs-10 help-desc-col">
+            <div class="row">
+                <div class="col-xs-12 help-desc-title">
+                    ABOUT CREATING TESTS
+                </div>
+                <div class="col-xs-12 help-desc-data">
+                    Tests are created in 3 parts i.e. <em>Test Details</em>, <em>Job Offer</em>, <em>Test Schedule</em>. Complete all the three parts. Still have doubts, Check <a href="/faq">FAQs</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1 help-close-col">
+            <span class="ti-close"></span>
+        </div>
+    </div>
+</div>
+
+<div class="col-xs-12 col-lg-10 col-lg-push-1">
+    <div class="row">
+        <div class="col-xs-12 col-lg-8 col-lg-push-2" id="form-tab-view">
+            <div class="row">
+                <div class="col-xs-4 form-tab-box">
+                    <div class='height-43'></div>
+                    <div class="form-tab-card active-tab" id="tab-card-1">
+                        <span class="ti-write"></span>
+                    </div>
+                </div>
+                <div class="col-xs-4 form-tab-box">
+                    <div class='height-43'></div>
+                    <div class="form-tab-card" id="tab-card-2">
+                        <span class="ti-user"></span>
+                    </div>
+                </div>
+                <div class="col-xs-4 form-tab-box">
+                    <div class='height-43'></div>
+                    <div class="form-tab-card" id="tab-card-3">
+                        <span class="ti-calendar"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form method="post" action="/create/test-module" class="col-xs-12 col-lg-8 col-lg-push-2" id="form-wrapper"> {% csrf_token %}
+    {% if alert %}
+    <div class="alert alert-{{alert.type}}">{{alert.message}}</div>
+    {% endif %}
+    <div class="col-xs-12 form-tab active-tab-form" id="tab1">
+        <div class="row">
+            <div id="form-head">
+                <span id="form-head-title">CREATE NEW TEST</span>
+            </div>
+            <div id="form-body"> 
+                <div class="col-xs-12 col-lg-4">
+                    <div class="row">
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Name <span class='red'>*</span> </div>
+                            <div  class="col-xs-12 f-input">
+                                <input required="required" type="text" name="test_name" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Category <span class='red'>*</span> </div>
+                            <div  class="col-xs-12 f-input">
+                                <input required="required" type="text" name="test_category" autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-8 f-field ">
+                    <div class="f-field-label">PROBLEM SETS <span class='red'>*</span> </div>
+                    <div class="col-xs-12" id="psl">
+                        <div class="row">
+                            <div id="add-pset-btn">
+                                <span class="ti-files"></span>
+                                <div id="btn-title">
+                                    ADD PROBLEM SETS
+                                </div>
+                            </div>
+                        </div>
+                        <div id="psl_click"></div>
+                    </div>
+                </div>
+                <div class="col-xs-12 btn-box">
+                    <div class="row">
+                        <div class="col-xs-6">
+                            
+                        </div>
+                        <div class="col-xs-6 right-btn">
+                            <div class="btn" onclick="form_show(2)" id="from-tab-1-next-btn">
+                                NEXT
+                                <span class="ti-angle-right"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 form-tab" id="tab2">
+        <div class="row">
+            <div id="form-head">
+                <span id="form-head-title">JOB DETAILS</span>
+            </div>
+            <div id="form-body"> 
+                <div class="col-xs-12 col-lg-8">
+                    <div class="row">
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Position <span class='red'>*</span> </div>
+                            <div  class="col-xs-12 f-input">
+                                <input required="required" type="text" name="position" autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Salary <span class='red'>*</span> </div>
+                            <div class="col-xs-3 col-lg-2 f-select">
+                                <select name="currency">
+                                    <option selected value="INR">INR</option>
+                                    <option value="USD">USD</option>
+                                    <option value="GBP">GBP</option>
+                                    <option value="EUR">EUR</option>
+                                </select>
+                            </div>
+                            <div  class="col-xs-6 col-lg-8 f-input">
+                                <input placeholder="ex: 50000" required="required" type="text" name="salary" autocomplete="off">
+                            </div>
+                            <div  class="col-xs-3 col-lg-2 property">
+                                monthly
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-lg-4 f-field ">
+                    <div class="row">
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Work Type <span class='red'>*</span> </div>
+                            <div class="col-xs-12 f-select">
+                                <select name="type">
+                                    <option selected value="OFW">Office Work</option>
+                                    <option value="WFH">Work From Home</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Duration <span class='red'>*</span> </div>
+                            <div class="col-xs-12 f-select">
+                                <select name="job-duration">
+                                    <option selected value="FTE">Full Time Employment</option>
+                                    <option value="MI3">3 Month Internship</option>
+                                    <option value="MI6">6 Month Internship</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Office Branch </div>
+                            <div class="col-xs-12 f-textarea">
+                                <textarea></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 btn-box">
+                    <div class="row">
+                        <div class="col-xs-6 left-btn">
+                            <div class="btn" onclick="form_show(1)">
+                                <span class="ti-angle-left"></span>
+                                BACK
+                            </div>
+                        </div>
+                        <div class="col-xs-6 right-btn">
+                            <div class="btn" onclick="form_show(3)">
+                                NEXT
+                                <span class="ti-angle-right"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12 form-tab" id="tab3">
+        <div class="row">
+            <div id="form-head">
+                <span id="form-head-title">TEST SCHEDULE</span>
+            </div>
+            <div id="form-body">
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Duration <span class='red'>*</span> </div>
+                            <input type="hidden" name="duration" id="duration" value="90">
+                            <span class="duration-card">
+                                30 min
+                                <input type="hidden" value="30">
+                            </span>
+                            <span class="duration-card">
+                                60 min
+                                <input type="hidden" value="60">
+                            </span>
+                            <span class="duration-card duration-selected">
+                                1.5 h
+                                <input type="hidden" value="90">
+                            </span>
+                            <span class="duration-card">
+                                2 h
+                                <input type="hidden" value="120">
+                            </span>
+                            <span class="duration-card">
+                                2.5 h
+                                <input type="hidden" value="150">
+                            </span>
+                            <span class="duration-card">
+                                3 h
+                                <input type="hidden" value="180">
+                            </span>
+                        </div>
+                        <div class="col-xs-12 f-field ">
+                            <div class="f-field-label">Date <span class='red'>*</span> </div>
+                            <div class="f-field-val" id="show-date"></div>
+                            <div class="calender">
+                                <div class="days">
+                                    <span class="day">Sun</span><span class="day">Mon</span><span class="day">Tue</span><span class="day">Wed</span><span class="day">Thu</span><span class="day">Fri</span><span class="day">Sat</span>
+                                </div>
+                                <div class="dates">
+                                    <input type="hidden" name="date" id="date_input">
+                                    {% spaceless %}
+                                    {% for d in dates %}
+                                    {% if d.available %}
+                                    <span class="a-date">{{ d.day }}<input type="hidden" class="date_val" value="{{d.date_val}}"><input type="hidden" class="date_str" value="{{d.date_str}}"></span>
+                                    {% else %}
+                                    <span class="n-date">{{ d.day }}</span>
+                                    {% endif %}
+                                    {% endfor %}
+                                    {% endspaceless %}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 f-field" id="time-input">
+                            <div class="f-field-label">Time <span class='red'>*</span> </div>
+                            <div class="col-xs-3 col-lg-1 f-select">
+                                <select name="time-hour">
+                                    <option value="01">01</option>
+                                    <option value="02">02</option>
+                                    <option value="03">03</option>
+                                    <option value="04">04</option>
+                                    <option value="05">05</option>
+                                    <option value="06">06</option>
+                                    <option value="07">07</option>
+                                    <option value="08">08</option>
+                                    <option selected value="09">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3 col-lg-1 f-select">
+                                <select name="time-min">
+                                    <option value="00">00</option>
+                                    <option value="10">10</option>
+                                    <option value="20">20</option>
+                                    <option selected value="30">30</option>
+                                    <option value="40">40</option>
+                                    <option value="50">50</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3 col-lg-1 f-select">
+                                <select name="time-am-pm">
+                                    <option value="AM">AM</option>
+                                    <option selected value="PM">PM</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3 col-lg-1 property">
+                                UTC
+                            </div>
+                        </div>
+                        <div class="col-xs-12 btn-box">
+                            <div class="row">
+                                <div class="col-xs-6 left-btn">
+                                    <div class="btn" onclick="form_show(2)">
+                                        <span class="ti-angle-left"></span>
+                                        BACK
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 right-btn">
+                                    <div class="btn" id="submit-form-btn">
+                                        <span class="ti-save"></span>
+                                        SAVE
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+</form>
+
+
+{% endblock %}
+
+{% block bodyjs %}
+<script type="text/javascript">
+    var nops = 0;
+    $('document').ready(function(){
+
+        $('.help-close-col').click(function(event){
+            $('.help-info').remove()
+        });
+
+        $('.a-date').click(function(event){
+            target = $(event.target)
+            $('.selected-date').removeClass('selected-date')
+            target.addClass('selected-date')
+            $('#show-date').html(target.find('.date_str').val())
+            $('#date_input').val(target.find('.date_val').val())
+        });
+
+        $('#submit-form-btn').click(function(){
+            $('#form-wrapper').submit();
+        });
+
+        target_date = $($('.a-date')[1])
+        target_date.click()
+
+    });
+
+    function form_show(form_no)
+    {
+        $('.active-tab').removeClass('active-tab')
+        $('.active-tab-form').removeClass('active-tab-form')
+        $('#tab-card-'+form_no).addClass('active-tab')
+        $('#tab'+form_no).addClass('active-tab-form')
+    }
+
+    $('.duration-card').click(function(event){
+        target = $(event.target)
+        dur = target.find('input').val()
+        $('#duration').val(dur)
+        console.log($('.duration-selected'))
+        $('.duration-selected').removeClass('duration-selected')
+        target.addClass('duration-selected')
+        console.log(dur);
+    });
+
+    var problem_sets_request;
+    var questions_request;
+    var selected_problem_sets = []
+    function get_problem_sets(){
+        if(problem_sets_request)
+            problem_sets_request.abort();
+            problem_sets_request = null;
+        $('#pset-list-view').html("<div class='loader'></div>")
+        s_pub = $('#search_public').is(":checked")
+        s_keyword = $('#search_keyword').val()
+        s_cat = $('#search_key').val()
+
+        service_url = "/service/problem-sets?"
+        if (s_pub)
+            service_url += "public=true&"
+
+        if(s_keyword != "")
+            service_url += s_cat+"="+s_keyword
+
+        problem_sets_request = $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: service_url,
+            success: function(result){
+                data = JSON.parse(result)
+                if (data.result == "error")
+                {
+                    console.log(data.message)
+                    return;
+                }
+                if (data.length == 0)
+                {
+                    $('#pset-list-view').html("<div id='pset-empty'><div id='empty-icon'><span class='ti-files'></span></div><div id='empty-head'>No Match</div></div>")
+                    return;
+                }
+                var org_psets = ""
+                var public_psets = "";
+                var suggestion;
+                for(var pset of data.problem_sets)
+                {
+                    suggestion = "<div class='col-xs-6 col-md-4 col-lg-3 pset-space'><div class='height-manager'></div><div class='pset-box'><div class='pset-card'><div class='col-xs-12 pset-name'><input class='pset_name' value='"+pset.name+"' type='hidden'><span class='name'>"+pset.name+"</span></div><div class='pset-category'><span class='ti-tag'></span>"+pset.category+"</div><div class='col-xs-12 pset-org'><span class='ti-user'></span>"+pset.organization.name+"</div></div><div class='pset-card-selector'><div class='pset-view-btn'><span class='ti-eye'></span></div><input class='pset_id' type='hidden' value='"+pset.id+"'></div></div><div class='pset-box-selected"
+                    if(selected_problem_sets.indexOf(pset.id) > -1)
+                        suggestion += " pset-box-selected-active"
+                    suggestion += "'></div></div>";
+
+                    if(pset.organization.id == data.organization)
+                        public_psets += suggestion
+                    else
+                        org_psets += suggestion
+                }
+                $('#pset-list-view').html(public_psets)
+                $('#pset-list-view').append(org_psets)
+            }
+        });
+    }
+
+    function get_questions(pset)
+    {
+        if(questions_request)
+            questions_request.abort();
+            questions_request = null;
+
+        $('#pset-view').html("<div class='loader'></div>")
+        service_url = "/service/problem-sets?id="+pset
+        
+        questions_request = $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: service_url,
+            success: function(result){
+                data = JSON.parse(result)
+                if (data.result == "error")
+                {
+                    $('#pset-view').html("<div id='pset-empty'><div id='empty-icon'><span class='ti-face-sad'></span></div><div id='empty-head'>Try Again</div></div>")
+                    return;
+                }
+                questions = ""
+                ques = ""
+                for(var q of data.problem_sets[0].questions)
+                {
+                    if(q.type == "COD")
+                    {
+                        ques = "<div class='col-xs-12 question '><div class='row'><div class='qno'>"+q.no+"</div><div class='col-xs-12 qmarks'>"+q.marks+" Marks</div><div class='col-xs-10 qquestion'>"+q.question+"</div><div class='col-xs-12 qinput'>Sample Input<pre>"+q.input+"</pre></div><div class='col-xs-12 qoutput'>Sample Output<pre>"+q.output+"</pre></div><div class='col-xs-12 qtime'>Time Limit<div>"+q.time+" sec</div></div>"
+                        if (q.tag)
+                            ques += "<div class='col-xs-10 qtagwrapper'><div class='qtag'><span class='ti-tag'></span> "+q.tag+"</div></div>"
+                        ques += "</div></div>"
+                    }
+                    else if(q.type == "OBJ")
+                    {
+                        opt = ""
+                        counter = 1 
+                        for(var op of q.options)
+                        {
+                            opt += "<div class='col-xs-10 qoption'>"+counter+". "+op+"</div>"
+                            counter += 1
+                        }
+                        ques = "<div class='col-xs-12 question '><div class='row'><div class='qno'>"+q.no+"</div><div class='col-xs-12 qmarks'>"+q.marks+" Marks</div><div class='col-xs-10 qquestion'>"+q.question+"</div>"+opt
+                        if (q.tag)
+                            ques += "<div class='col-xs-10 qtagwrapper'><div class='qtag'><span class='ti-tag'></span> "+q.tag+"</div></div>"
+                        ques += "</div></div>"
+                    }
+                    else
+                    {
+                        ques = "<div class='col-xs-12 question '><div class='row'><div class='qno'>"+q.no+"</div><div class='col-xs-12 qmarks'></div><div class='col-xs-10 qquestion'>"+q.question+"</div>"
+                        if (q.tag)
+                            ques += "<div class='col-xs-10 qtagwrapper'><div class='qtag'><span class='ti-tag'></span> "+q.tag+"</div></div>"
+                        ques += "</div></div>"
+                    }
+
+
+                    questions += ques;
+                }
+                $('#pset-path').append("<span class='pset-name'>"+data.problem_sets[0].name+"</span>")
+                $('#pset-view').html(questions)
+            }
+        });
+    }
+
+    $( document ).ready(function(){
+
+        $(document).on("click", '#pset-list-view .pset-card-selector', function(event){
+            target = $(event.target)
+            target.parent().parent().find(".pset-box-selected").addClass("pset-box-selected-active");
+            pset_id = target.find('.pset_id').val()
+            selected_problem_sets.push(pset_id)
+            console.log("called")
+            $('#add-pset-btn').html("<div id='pset-size'>"+selected_problem_sets.length+"</div>");
+        });
+
+        $(document).on("click", '#pset-list-view .pset-box-selected', function(event){
+            target = $(event.target)
+            target.removeClass("pset-box-selected-active")
+            var index = selected_problem_sets.indexOf(target.parent().find('.pset_id').val());
+            if (index > -1) {
+                console.log(index)
+                selected_problem_sets.splice(index, 1);
+            }
+            if(selected_problem_sets.length == 0)
+            {
+                $('#add-pset-btn').html("<span class='ti-files'></span><div id='btn-title'>ADD PROBLEM SETS</div>");
+            }
+            else
+            {
+                $('#add-pset-btn').html("<div id='pset-size'>"+selected_problem_sets.length+"</div>");
+            }
+        });
+
+        $(document).on("click", '#pset-list-view .pset-view-btn', function(event) {
+            event.stopPropagation()
+            pset_id = $(event.target).parent().parent().find('.pset_id').val()
+            $("#pset-view").css("display","block")
+            $("#pset-view").css("opacity","1")
+            path = $('#pset-path')
+            path.append("<span class='ti-angle-right'></span>")
+            $("#pset-head").addClass("pset-head-active")
+            get_questions(pset_id);
+        });
+
+        $(document).on("click", ".pset-head-active", function(event){
+            target = $(event.target)
+            target.removeClass('pset-head-active')
+            $("#pset-view").css("opacity","0")
+            $("#pset-view").css("display","none")
+            $("#pset-view").html("")
+            $("#pset-path").html("<span id='pset-head'>Problem Sets</span>")
+        });
+
+        $('#search_keyword').keyup(function(){
+            target = $('#pset-head')
+            target.removeClass('pset-head-active')
+            $("#pset-view").css("opacity","0")
+            $("#pset-view").css("display","none")
+            $("#pset-view").html("")
+            $("#pset-path").html("<span id='pset-head'>Problem Sets</span>")
+            get_problem_sets();
+        });
+
+        $('#search_key').change(function(){
+            target = $('#pset-head')
+            target.removeClass('pset-head-active')
+            $("#pset-view").css("opacity","0")
+            $("#pset-view").css("display","none")
+            $("#pset-view").html("")
+            $("#pset-path").html("<span id='pset-head'>Problem Sets</span>")
+            get_problem_sets();
+        })
+
+        $('#search_public').change(function(){
+            target = $('#pset-head')
+            target.removeClass('pset-head-active')
+            $("#pset-view").css("opacity","0")
+            $("#pset-view").css("display","none")
+            $("#pset-view").html("")
+            $("#pset-path").html("<span id='pset-head'>Problem Sets</span>")
+            get_problem_sets();
+        });
+
+        $('#psl_click').click(function(event) {
+            $('#pset-window-frame').css("display","block");
+            get_problem_sets()
+        });
+
+        $('#pset-window-close-btn').click(function(event){
+            $('#pset-window-frame').css("display","none");
+        });
+
+        $('.field-clear').click(function(){
+            get_problem_sets()
+        });
+
+        $('#from-tab-1-next-btn').click(function(event){
+            count = 0
+            length = selected_problem_sets.length
+            input = ""
+            for (pset_id of selected_problem_sets)
+            {
+                input += "<input type='hidden' name='ps"+count+"' value='"+pset_id+"'>"
+                count += 1
+            }
+            input += "<input type='hidden' name='no-of-psets' value='"+length+"'>"
+            $('#add-pset-btn').append(input)
+
+        });
+
+    });
+
+</script>
+
+{% endblock %}

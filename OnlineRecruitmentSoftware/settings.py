@@ -26,7 +26,7 @@ SECRET_KEY = 'e$rsns@lx-6wc6!xm3y6o_8xxk222w+kp1x^a07w+fnvrk!3xx'
 DEBUG = True
 
 ALLOWED_HOSTS = [ 'onlinerecruitmentsoftware.eu-gb.mybluemix.net', 'localhost' ]
-
+APPEND_SLASH = False
 # Application definition
 
 INSTALLED_APPS = [

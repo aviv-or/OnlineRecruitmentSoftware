@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block title %}Create Problem Set{% endblock %}
+
+{% block headcss %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'employee/schedule-test-browse.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
+            <a class="navbar-brand" href="#">
+                Hiresome
+            </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ user.name }}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/profile"> Profile </a></li>
+                    <li><a href="/logout?redirect=/"> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+{% if alert %}
+<div class="alert alert-{{alert.type}}">{{alert.message}}</div>
+{% endif %}
+
+<div class="col-xs-10 col-xs-push-1 col-lg-8 col-md-push-2">
+    <div class="row" id="test-wrapper">
+
+        <h3>
+            Schedule Tests
+        </h3>
+        {% for test in tests %}
+        
+        <div class="col-xs-12 test">
+            <div class="row">
+                <div class="col-xs-12">
+                    <a href="/schedule-test/{{ test.id }}"><h4>{{ test.name }}</h4></a>
+                    <span class="glyphicon glyphicon-tag"></span>
+                    <span class="pset-category">{{ test.category }}</span>
+                </div>
+                <div class="col-xs-12">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <h4>Problem Sets</h4>
+                        </div>
+                        <div class="col-xs-12">
+                            <div class="row">
+                                {% for pset in test.problem_sets %}
+                                <div class="col-xs-12 col-lg-4">
+                                    <div class="pset">
+                                        <div class="row">
+                                            <div class="col-xs-10">
+                                                <h4>{{ pset.name }}</h4>
+                                                {% if pset.category %}
+                                                <span class="pset-category-box">
+                                                    <span class="glyphicon glyphicon-tag"></span>
+                                                    <span class="pset-category">{{ pset.category }}</span>
+                                                </span>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <br>
+        <br>
+        <br>
+        <h4>
+            None Remaining
+        </h4>
+
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

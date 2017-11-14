@@ -1,0 +1,97 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
+
+.red
+{
+    color: red;
+    font-size: 14px;
+}
+
+#logo {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 40px;
+    height: 40px;
+}
+
+.navbar {
+    margin-bottom: 0;
+    background-color: #0078d7;
+    color: #fff;
+    border: 0;
+    border-radius: 0;
+}
+
+.navbar > .container .navbar-brand,
+.navbar > .container-fluid .navbar-brand {
+    font-family: sans, sans-serif;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-left: 30px;
+}
+
+.navbar-default .navbar-nav > li > a ,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-brand, 
+.navbar-default .navbar-brand:focus, 
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover {
+    color: #fff;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover {
+    background-color: #0078d7;
+}
+
+@media(max-width: 767px)
+{
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: #fff;
+    }
+}
+
+
+#test-wrapper{
+    margin-bottom: 50px;
+}
+
+.test{
+    color: #333;
+    padding: 20px 0px;
+    border-bottom: 1px solid #ddd;
+}
+
+.test:last-of-type{
+    border: 0px;
+}
+
+.pset {
+    padding: 15px;
+    height: 100%;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+}
+
+@media(max-width: 768px)
+{
+    .pset {
+        margin: 10px 0px;
+    }
+}
+
+.test-category-box{
+    font-size: 14px;
+    padding: 3px 5px;
+}
+
+.pset-category-box{
+    font-size: 12px;
+    background-color: #eee;
+    padding: 3px 5px;
+    border-radius: 2px;
+}

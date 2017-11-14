@@ -1,0 +1,220 @@
+.f-field {
+    margin: 5px 0px;
+}
+
+.f-field .f-input, .f-select, .f-textarea {
+    z-index: 1;
+    height: 40px;
+    padding: 0;
+    background-color: #f1f5f8;
+    color: #34495E;
+}
+
+.f-textarea {
+    height: 80px;
+}
+
+.f-field .f-select:before {
+    position: absolute;
+    z-index: 2;
+    font-family: 'themify';
+    content: "\e64b";
+    height: 40px;
+    line-height: 40px;
+    width: 20px;
+    right: 0;
+    top: 0;
+}
+
+.f-field input {
+    z-index: 3;
+    border: 0px;
+    border-radius: 2px;
+    font-family: sans;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    padding: 0 10px;
+    background-color: rgba(255,255,255,0);
+}
+
+.f-field .f-input input {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.f-field .f-select select {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.f-field  option, select {
+    font-family: sans;
+    border: 0px;
+    border-radius: 0;
+    height: 30px;
+    font-size: 16px;
+    padding: 0 10px;
+}
+
+.f-field  select {
+    z-index: 3;
+    background-color: rgba(255,255,255,0);
+    height: 100%;
+    width: 100%;
+    cursor: pointer;
+    height: 40px;
+    padding: 0 20px 0 10px;
+    text-decoration: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+}
+
+.f-field textarea {
+    font-family: sans;
+    z-index: 3;
+    border: 0px;
+    border-radius: 2px;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    padding: 0 10px;
+    background-color: rgba(255,255,255,0);
+}
+
+.f-field .property {
+    height: 40px;
+    line-height: 40px;
+    font-size: 12px;
+    background-color: #f1f5f8;
+    padding: 0 20px 0 10px;
+    color: #34495E;
+}
+
+[required] {
+    box-shadow: none;
+}
+
+.f-field .f-field-label {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-family: sans;
+    color: #999;
+    padding-bottom: 5px;
+}
+
+.f-field .f-field-val {
+    height: 60px;
+    line-height: 60px;
+    font-size: 24px;
+    color: #666;
+    font-family: sans;
+}
+
+.form-field {
+    margin: 5px 0px;
+    height: 30px;
+}
+
+.form-field .field-input, .field-select, option {
+    z-index: 1;
+    background-color: #fff;
+    
+    font-size: 14px;
+    color: #333;
+    font-family: sans;
+    font-weight: 300;
+    
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    
+    border: 1px solid #aaa;
+    box-shadow: 0;
+    padding-left: 10px;
+    
+    overflow: hidden;
+    outline: none;
+}
+
+.form-field .field-select {
+    text-decoration: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+}
+
+.form-field .field-input {
+    padding-left: 40px;
+    padding-right: 30px;
+    -webkit-transition: padding 0.1s;
+    transition: padding 0.1s;
+}
+
+.form-field .field-input:hover {
+    border: 1px solid #333;
+}
+
+.form-field .field-clear, .field-icon {
+    z-index: 2;
+    background-color: #fff;
+    margin: 1px;
+    position: absolute;
+    font-size: 14px;
+    top: 0;
+    height: 28px;
+    width: 28px;
+    text-align: center;
+    line-height: 30px;
+    overflow: hidden;
+    color: #1E8BC3;
+}
+
+.form-field .field-icon{
+    -webkit-transition: all 0.1s;
+    transition: all 0.1s;
+    left: 10px;
+}
+
+.form-field .field-clear{
+    display: none;
+    right: 0;
+    cursor: pointer;
+}
+
+.form-field .field-icon-active {
+    width: 0;
+}
+
+.form-field .field-input-active {
+    border: 1px solid #2574A9;
+    padding-left: 10px;
+}
+
+.form-field .field-input-active:hover {
+    border: 1px solid #2574A9;
+}
+
+.form-field .field-clear-active {
+    display: block;
+}
+
+.field-label {
+    font-size: 12px;
+    font-family: sans;
+    padding-bottom: 5px;
+}
+
+.form-field label {
+    margin-left: -15px;
+    font-family: sans;
+    font-size: 12px;
+    font-weight: normal;
+}

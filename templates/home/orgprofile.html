@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+
+{% block title %}{{org.name}} | Profile{% endblock %}
+
+{% block headcss %}
+{% load static %}
+<link rel="stylesheet" type="text/css" href="{% static 'home/profile.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
+            <a class="navbar-brand" href="#">
+                Hiresome
+            </a>
+        </div>
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <span class="glyphicon glyphicon-user"></span> {{ org.name }}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/profile"> Profile </a></li>
+                    <li><a href="/logout?r=/"> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<div class="col-xs-10 col-xs-push-1 col-lg-8 col-lg-push-2">
+    <div class="row">
+        {% if alert %}
+        <div class="alert alert-{{alert.type}}"> {{alert.message}} </div> <br>
+        {% endif %}
+        <div class="responsive-form">
+            <div class="responsive-field">
+                <div class="responsive-field-label">Add Employee</div>
+                <input required="required" type="text" class="responsive-field-input" id="search-user-field" autocomplete="off">
+            </div>
+        </div>
+        <div class="row" id="form-suggestions"></div>
+        <div class="row">
+            <div class="col-xs-12 col-lg-4">
+                <span id="hr-box">Human Resource Manager</span><br><br>
+                {% if org.employees.HR %}
+                <div class="employee">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <h4>{{ org.employees.HR.name }}</h4>
+                            <h5>{{ org.employees.HR.email }}</h5>
+                        </div>
+                        <div class="col-xs-2 action-btn">
+                            <a href="/organization/remove-employee/{{ org.employees.HR.id }}" title="Remove From This Position"><span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                    </div>
+                </div>
+                {% else %}
+                <h4>Not Employed</h4>
+                {% endif %}
+            </div>
+            <div class="col-xs-12 col-lg-4">
+                <span id="su-box">Test Supervisor</span><br><br>
+                {% if org.employees.SU %}
+                    <div class="employee">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h4>{{ org.employees.SU.name }}</h4>
+                                <h5>{{ org.employees.SU.email }}</h5>
+                            </div>
+                            <div class="col-xs-2 action-btn">
+                                <a href="/organization/remove-employee/{{ org.employees.SU.id }}" title="Remove From This Position"><span class="glyphicon glyphicon-remove"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                <h4>Not Employed</h4>
+                {% endif %}
+            </div>
+            <div class="col-xs-12 col-lg-4">
+                <span id="ps-box">Problem Setter</span><br><br>
+                {% if org.employees.PS %}
+                    <div class="employee">
+                        <div class="row">
+                            <div class="col-xs-10">
+                                <h4>{{ org.employees.PS.name }}</h4>
+                                <h5>{{ org.employees.PS.email }}</h5>
+                            </div>
+                            <div class="col-xs-2 action-btn">
+                                <a href="/organization/remove-employee/{{ org.employees.PS.id }}" title="Remove From This Position"><span class="glyphicon glyphicon-remove"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                <h4>Not Employed</h4>
+                {% endif %}
+            </div>
+        </div>
+        <br>
+        <br>
+        <span id="gn-box">General Members</span><br><br>
+        {% if org.employees.GN %}
+        <div class="row">
+        {% for gen in org.employees.GN %}
+            <div class="col-xs-12 col-md-6 col-lg-4">
+                <div class="employee">
+                    <div class="row">
+                        <div class="col-xs-10">
+                            <h4>{{ gen.name }}</h4>
+                            <h5>{{ gen.email }}</h5>
+                        </div>
+                        <div class="col-xs-2 action-btn">
+                            <a href="/organization/remove-employee/{{ gen.id }}" title="Remove From Organization"><span class="glyphicon glyphicon-remove"></span></a>
+                        </div>
+                        {% if not org.employees.HR %}
+                        <div class="col-xs-12">
+                            <a href="/organization/add-employee/{{ gen.id }}?mod=HR">
+                                Set as HR Manager
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if not org.employees.SU %}
+                        <div class="col-xs-12">
+                            <a href="/organization/add-employee/{{ gen.id }}?mod=SU">
+                                Set as Test Supervisor
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if not org.employees.PS %}
+                        <div class="col-xs-12">
+                            <a href="/organization/add-employee/{{ gen.id }}?mod=PS">
+                                Set as Problem Setter
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+        </div>
+        {% else %}
+        <h4>None</h4>
+        {% endif %}
+        <br>
+        <br>
+        <br>
+        <br>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block bodyjs %}
+<script>
+    var user_names_request;
+$('document').ready(function(){
+
+    $('#search-user-field').keyup(function(){
+        name = $('#search-user-field').val();
+        if (name == "")
+        {
+            $('#form-suggestions').html("");
+            return;
+        }
+
+        if(user_names_request)
+            user_names_request.abort();
+
+        $('#form-suggestions').html('<div class="loader"></div>');
+
+        user_names_request = $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: '/service/users-data',
+            data: {name: name},
+            success: function(result){
+                if (name == "")
+                {
+                    $('#form-suggestions').html("");
+                    return;
+                }
+                data = JSON.parse(result)
+                var suggestion = "";
+                for(var user of data.users_data)
+                {
+                    if(user.available)
+                    {
+                        suggestion += "<div class='col-xs-12 col-md-6 col-lg-4'><div class='employee'><div class='row'><div class='col-xs-10'><h4>"+user.name+"</h4><h5>"+user.email+"</h5></div><div class='col-xs-2 action-btn'><a href='/organization/add-employee/"+user.id+"?mod=GN' title='Add User to Organization'><span class='glyphicon glyphicon-plus'></span></a></div></div></div></div>";
+                    }
+                }
+                if (suggestion == "")
+                    $('#form-suggestions').html("No Available Users for <b>'"+name+"'</b>");
+                else
+                    $('#form-suggestions').html(suggestion);
+            },
+            error: function(){
+                if(user_names_request)
+                {
+                    if (name == "")
+                    {
+                        $('#form-suggestions').html("");
+                        return;
+                    }
+                    if (user_names_request.state() == "rejected")
+                        $('#form-suggestions').html("No Available Users for <b>'"+name+"'</b>")
+                }
+            }
+        });
+    });
+
+});
+</script>
+
+{% endblock %}

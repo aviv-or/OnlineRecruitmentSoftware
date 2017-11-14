@@ -2,10 +2,16 @@
 <html>
 <head>
 	<title>{% block title %}{% endblock %}</title>
+	{% load static %}
+	<link rel="icon" href="{% static 'image/logo.svg' %}">
 	<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<script type="text/javascript" src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-	<link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet"> 
+	{% load static %}
+	<link rel="stylesheet" type="text/css" href="{% static 'responsive-form.css' %}">
+	<link rel="stylesheet" type="text/css" href="{% static 'themify-icons.css' %}">
+	<script type="text/javascript" src="{% static 'responsive-form.js' %}"></script>
+	<link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
 	{% block headcss %}{% endblock %}
 </head>
 <body>
@@ -18,4 +24,5 @@
 	{% block bodyjs %}
 	{% endblock %}
 </body>
+	{% block headjs %}{% endblock %}
 </html>

@@ -13,8 +13,8 @@
 		<div class="col-sm-10 col-sm-push-1" id="login_box_internal">
 			<span id="login_title"><h3>Login</h3></span><br>
 			{% if alert %}
-			<div class="alert alert-{{ alert }}">
-				{{ alertmessage }}
+			<div class="alert alert-{{ alert.type }}">
+				{{ alert.message }}
 			</div>
 			{% endif %}
 			<form method="post" action="/login"> {% csrf_token %}
@@ -35,7 +35,7 @@
 				<div class="form-group">
 					<button type="submit" class="btn btn-primary btn-block">Log In</button>
 				</div>
-				<input type="hidden" name="redirect" value="{{ redirect }}">
+				<input type="hidden" name="r" value="{{ redirect }}">
 			</form>
 			<br>
 			<div id="register">

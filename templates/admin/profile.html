@@ -11,9 +11,12 @@
 
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
-		<div class="navbar-header" id="brand">
-			<a class="navbar-brand" href="#">ADMIN PANEL</a>
-		</div>
+		<div class="navbar-header">
+            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
+            <a class="navbar-brand" href="#">
+                Hiresome
+            </a>
+        </div>
 		<ul class="nav navbar-nav">
 			<!-- <li class="active"><a href="#">Home</a></li> -->
 		</ul>
@@ -32,15 +35,14 @@
 	</div>
 </nav>
 
-
 {% for o in orgs %}
-<div class="col-xs-10 col-sm-4 col-lg-3 org-card">
-	<div class="row">
+<div class="col-xs-12 col-md-6 col-lg-4 ">
+	<div class="org-card">
 		<div class="org-name">
 			{{o.name}}
 		</div>
 		<div class="org-desc">
-			{{o.desc}}
+			{{o.description}}
 		</div>
 		<div class="org-email">
 			<span class="glyphicon glyphicon-envelope"></span> <a href="mailto:{{o.email}}">{{o.email}}</a>
@@ -51,12 +53,12 @@
 		<div class="org-location">
 			<span class="glyphicon glyphicon-map-marker"></span> {{o.location}}
 		</div>
-		<a href="/admin/verify/{{o.email}}">
+		<a href="/admin/verify/{{o.id}}" class="org-btn-link">
 			<div class="org-btn">
 				Mark as Verified
 			</div>
 		</a>
-	</div>			
+ 	</div>
 </div>
 		
 {% endfor %}
