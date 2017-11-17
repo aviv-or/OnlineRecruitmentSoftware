@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from django.http import HttpResponse, JsonResponse
 
@@ -23,7 +23,8 @@ def find_tests (request):
 
     if not s_test_type:
         s_test_type = "all"
-    if s_test_type != "all" and s_test_type != "live" and s_test_type != "non-live":
+    if s_test_type != "all" and s_test_type != "live" \
+    and s_test_type != "upcomming" and s_test_type != "completed":
         response['result'] = "error"
         response['message'] = "Unknown Test Type"
         return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
@@ -103,12 +104,7 @@ def find_tests (request):
     else:
         test_list = TestModuleDB.all()
 
-    if s_test_type == "all":
-        count, test_list = tests(test_list, s_name, s_category, s_from, s_max)
-    elif s_test_type == "live":
-        count, test_list = live_tests(test_list, s_name, s_category, s_from, s_max)
-    else:
-        count, test_list = live_tests(test_list, s_name, s_category, s_from, s_max, False)
+    count, test_list = tests(test_list, s_name, s_category, s_from, s_max, s_test_type)
 
     if s_sort_with:
         if s_sort_with == "date":
@@ -132,25 +128,97 @@ def find_tests (request):
     return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
 
 
-def tests (tests, name=None, category=None, s_from=1, s_max=6):
+def remaining_time(request):
+    response = {}
+    data = request.GET
+    s_id = data.get('id')
+    if not s_id:
+        response['result'] = "error"
+        response['message'] = "No Test Provided"
+        return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
+
+    test = TestModuleDB.test_module(uno=s_id)
+    if not test.valid(schedule=True):
+        response['result'] = "error"
+        response['message'] = "Test Doesn't Exists"
+        return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
+
+    days, hours, minutes = testhelper.remaining_time(test)
+
+    response['result'] = "success"
+    response['days'] = days
+    response['hours'] = hours
+    response['minutes'] = minutes
+    return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
+
+def tests (tests, name=None, category=None, s_from=1, s_max=6, s_type="all"):
     test_list = []
     result = []
 
-    if name or category:
-        for test in tests:
-            if name and category:
-                if test['name'].lower().startswith(name.lower())\
-                and test['category'].lower().startswith(category.lower()):
-                    test_list.append(test)
-            elif name:
-                if test['name'].lower().startswith(name.lower()):
-                    test_list.append(test)
+    if s_type == "all":
+        if name or category:
+            for test in tests:
+                if name and category:
+                    if test['name'].lower().startswith(name.lower())\
+                    and test['category'].lower().startswith(category.lower()):
+                        test_list.append(test)
+                elif name:
+                    if test['name'].lower().startswith(name.lower()):
+                        test_list.append(test)
 
-            elif category:
-                if test['category'].lower().startswith(category.lower()):
+                elif category:
+                    if test['category'].lower().startswith(category.lower()):
+                        test_list.append(test)
+        else:
+            test_list = tests
+    elif s_type == "live":
+        for test in tests:
+            if testhelper.is_live_test(test):
+                if name and category:
+                    if test['name'].lower().startswith(name.lower())\
+                    and test['category'].lower().startswith(category.lower()):
+                        test_list.append(test)
+                elif name:
+                    if test['name'].lower().startswith(name.lower()):
+                        test_list.append(test)
+                elif category:
+                    if test['category'].lower().startswith(category.lower()):
+                        test_list.append(test)
+                else:
+                    test_list.append(test)
+    elif s_type == "upcomming":
+        for test in tests:
+            if not testhelper.is_live_test(test)\
+            and not testhelper.is_completed_test(test):
+                if name and category:
+                    if test['name'].lower().startswith(name.lower())\
+                    and test['category'].lower().startswith(category.lower()):
+                        test_list.append(test)
+                elif name:
+                    if test['name'].lower().startswith(name.lower()):
+                        test_list.append(test)
+                elif category:
+                    if test['category'].lower().startswith(category.lower()):
+                        test_list.append(test)
+                else:
+                    test_list.append(test)
+    elif s_type == "completed":
+        for test in tests:
+            if testhelper.is_completed_test(test):
+                if name and category:
+                    if test['name'].lower().startswith(name.lower())\
+                    and test['category'].lower().startswith(category.lower()):
+                        test_list.append(test)
+                elif name:
+                    if test['name'].lower().startswith(name.lower()):
+                        test_list.append(test)
+                elif category:
+                    if test['category'].lower().startswith(category.lower()):
+                        test_list.append(test)
+                else:
                     test_list.append(test)
     else:
-        test_list = tests
+        return 0, []
 
     itr_from = 1;
     itr_max = 0;

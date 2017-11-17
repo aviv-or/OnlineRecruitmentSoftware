@@ -20,3 +20,30 @@ def is_live_test(test):
         return False
 
     return True
+
+def remaining_time(test):
+
+    test_date_time = test['schedule']['date']+"-"+test['schedule']['time']
+    test_date_time = datetime.strptime(test_date_time, "%d-%m-%Y-%H:%M")
+    now = datetime.now()
+
+    end_test_date_time = test_date_time + timedelta(minutes=int(test['schedule']['duration'] ) + 1)
+
+    if now > end_test_date_time:
+        return 0,0,0
+
+    difference = end_test_date_time - now
+
+    days = difference.days
+    hours = difference.seconds//3600 - difference.days*24
+    minutes = difference.seconds//60 - hours*60
+
+    return days, hours, minutes
+
+def is_completed_test(test):
+
+    days, hours, minutes = remaining_time(test)
+    if days == 0 and hours == 0 and minutes == 0:
+        return True
+
+    return False

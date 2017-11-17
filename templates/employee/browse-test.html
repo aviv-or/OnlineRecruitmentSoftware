@@ -109,7 +109,7 @@
             type: 'GET',
             dataType: 'json',
             url: '/service/tests',
-            data: {"from": t_from, "max": t_max, "sort_with": "name", "test_type": "non-live"},
+            data: {"from": t_from, "max": t_max, "sort_with": "name", "test_type": "upcomming"},
             success: function(result){
                 $('#upcoming-loader-box').html("")
                 data = JSON.parse(result)
