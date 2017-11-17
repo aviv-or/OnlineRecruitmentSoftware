@@ -7,6 +7,7 @@ class TestModuleData(dict):
         self['_id']          = None
         self['name']         = None
         self['category']     = None
+        self['description']  = None
         self['organization'] = None
         self['problem_sets'] = []
         self['schedule']     = {}
@@ -16,8 +17,10 @@ class TestModuleData(dict):
         self['_id']          = data.get('_id')
         self['name']         = data.get('name')
         self['category']     = data.get('category')
+        self['description']  = data.get('description')
         self['organization'] = data.get('organization')
         self['problem_sets'] = data.get('problem_sets', [])
+
         if data.get('schedule'):
             self['schedule']     = TestSchedule(data.get('schedule', {}))
         if data.get('job_offer'):
@@ -59,10 +62,8 @@ class TestModuleData(dict):
         JOB_OFFER           = "Wrong Job Offer"
         PSET_DOES_NOT_EXIST = "Problem Set Does Not Exist"
 
-
 class TestSchedule(dict):
     def __init__(self, data={}):
-        print(data)
         self['date'] = data.get('date')
         self['time']   = data.get('time')
         self['duration'] = data.get('duration')

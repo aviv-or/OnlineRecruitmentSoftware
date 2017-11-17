@@ -504,6 +504,10 @@
     text-align: center;
 }
 
+#test_description {
+    min-height: 120px;
+}
+
 #psl {
     min-height: 120px;
     background-color: #f1f5f8;

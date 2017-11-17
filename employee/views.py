@@ -280,10 +280,12 @@ class CreateTestModule(View):
             return HttpResponseRedirect("/create/test-module")
 
         test_category = data.get('test_category')
+        test_description = data.get('test_description')
 
         test = { 
                     "name": test_name, 
-                    "category": test_category, 
+                    "category": test_category,
+                    "description": test_description,
                     "organization": org['_id'],
                     "problem_sets": [],
                     "schedule": None, 
