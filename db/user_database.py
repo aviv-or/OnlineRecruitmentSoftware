@@ -71,7 +71,6 @@ class UserDB():
 
         if user['_id'] in db:
             doc = db[user['_id']]
-            doc.update(user)
             doc.delete()
             return True
 

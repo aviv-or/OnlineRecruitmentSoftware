@@ -60,7 +60,6 @@ class ProblemSetDB():
 
         if ps['_id'] in db:
             doc = db[ps['_id']]
-            doc.update(ps)
             doc.delete()
             return True
 

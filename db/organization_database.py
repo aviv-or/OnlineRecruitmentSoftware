@@ -70,7 +70,6 @@ class OrganizationDB():
 
         if org['_id'] in db:
             doc = db[org['_id']]
-            doc.update(org)
             doc.delete()
             return True
 

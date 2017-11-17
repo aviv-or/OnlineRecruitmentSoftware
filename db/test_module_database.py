@@ -60,7 +60,6 @@ class TestModuleDB():
 
         if tm['_id'] in db:
             doc = db[tm['_id']]
-            doc.update(tm)
             doc.delete()
             return True
 
