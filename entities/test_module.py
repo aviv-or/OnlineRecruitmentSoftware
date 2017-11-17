@@ -1,5 +1,6 @@
 from db.interface.test_module_data import TestModuleData
 from db.problem_set_database import ProblemSetDB
+from db.submission_set_database import SubmissionSetDB
 
 class TestModule(TestModuleData):
     def __init__(self, data=None):
@@ -17,6 +18,10 @@ class TestModule(TestModuleData):
         psetdb = ProblemSetDB.all()
         psets = [doc for doc in psetdb if doc['_id'] in self['problem_sets']]
         return psets
+
+    def submissions(self):
+        submissions = self.get('submissions')
+        return SubmissionSetDB.submission_set(uno=submissions)
 
     def valid(self, safe=True, schedule=False, job=False):
         if not super().valid(schedule, job):

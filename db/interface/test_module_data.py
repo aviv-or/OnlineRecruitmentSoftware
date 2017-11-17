@@ -9,6 +9,7 @@ class TestModuleData(dict):
         self['category']     = None
         self['description']  = None
         self['organization'] = None
+        self['submissions']  = None
         self['problem_sets'] = []
         self['schedule']     = {}
         self['job_offer']    = {}
@@ -20,6 +21,7 @@ class TestModuleData(dict):
         self['description']  = data.get('description')
         self['organization'] = data.get('organization')
         self['problem_sets'] = data.get('problem_sets', [])
+        self['submissions']  = data.get('submissions')
 
         if data.get('schedule'):
             self['schedule']     = TestSchedule(data.get('schedule', {}))
@@ -60,6 +62,7 @@ class TestModuleData(dict):
         NO_CATEGORY         = "No Category Provided"
         SCHEDULE            = "Wrong Test Schedule"
         JOB_OFFER           = "Wrong Job Offer"
+        SUBMISSIONS         = "Wrong Submissions"
         PSET_DOES_NOT_EXIST = "Problem Set Does Not Exist"
 
 class TestSchedule(dict):

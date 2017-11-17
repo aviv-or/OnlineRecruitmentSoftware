@@ -30,10 +30,14 @@ USERS = "users"
 ORGANIZATIONS = "organizations"
 PROBLEM_SETS = "problem_sets"
 TEST_MODULES = "test_modules"
-#USERS = "test_user"
-#ORGANIZATIONS = "test_organization"
-#PROBLEM_SETS = "test_pset"
-#TEST_MODULES = "test_test_module"
+SUBMISSIONS = "submissions"
+SUBMISSION_SETS = "submission_sets"
+# USERS = "test_user"
+# ORGANIZATIONS = "test_organization"
+# PROBLEM_SETS = "test_pset"
+# TEST_MODULES = "test_test_module"
+# SUBMISSIONS = "test_submissions"
+# SUBMISSION_SETS = "test_submission_sets"
 
 # employee types
 

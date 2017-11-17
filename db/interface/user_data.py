@@ -1,6 +1,7 @@
 import enum
 
 from .organization_data import OrganizationData
+from entities.submission import Submission
 
 class UserData(dict):
 
@@ -13,6 +14,7 @@ class UserData(dict):
         self['password']        = None
         self['organization']    = None
         self['role']            = None
+        self['submissions']     = []
 
     def load(self, data):
         self['_id']             = data.get('_id')
@@ -23,6 +25,7 @@ class UserData(dict):
         self['password']        = data.get('password')
         self['organization']    = data.get('organization')
         self['role']            = data.get('role')
+        self['submissions']     = data.get('submissions', [])
 
     def valid(self):
         self.error = self.Error.NONE
@@ -52,4 +55,5 @@ class UserData(dict):
         EMAIL                   = "No or Wrong Email"
         PASSWORD                = "No or Wrong Password"
         EMAIL_ALREADY_EXISTS    = "Email Already Exists"
+        SUBMISSIONS             = "Includes Wrong Submissions"
         ROLE                    = "Unknown Role"
