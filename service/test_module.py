@@ -121,6 +121,10 @@ def find_tests (request):
         response['length'] = 0
         return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
 
+    for t in test_list:
+        t['id'] = t['_id']
+        del t['_id']
+
     response['result'] = "success"
     response['length'] = count
     response['tests'] = test_list
@@ -137,13 +141,22 @@ def remaining_time(request):
         response['message'] = "No Test Provided"
         return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
 
+    s_include = data.get('include')
+    if s_include and (s_include != "duration"):
+        response['result'] = "error"
+        response['message'] = "Unknown Include Type"
+        return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
+
     test = TestModuleDB.test_module(uno=s_id)
     if not test.valid(schedule=True):
         response['result'] = "error"
         response['message'] = "Test Doesn't Exists"
         return JsonResponse(json.dumps(response, indent=4, sort_keys=True), safe=False)
 
-    days, hours, minutes = testhelper.remaining_time(test)
+    if s_include:
+        days, hours, minutes = testhelper.remaining_time(test)
+    else:
+        days, hours, minutes = testhelper.remaining_time(test, live=False)
 
     response['result'] = "success"
     response['days'] = days

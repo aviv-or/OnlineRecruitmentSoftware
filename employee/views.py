@@ -184,7 +184,6 @@ class CreateProblemSet(View):
 
 class CreateTestModule(View):
     def get(self, request):
-        print(self.get_client_ip(request))
         context = {}
         if LOGIN_ID not in request.session or LOGIN_TYPE not in request.session:
             return HttpResponseRedirect("/profile")
@@ -325,7 +324,7 @@ class CreateTestModule(View):
                         "duration": data.get('job-duration'),
                         "salary": data.get('salary'),
                         "currency": data.get('currency'),
-                        "office": data.get('office')
+                        "description": data.get('job-description')
                     }
 
         test['schedule'] = schedule
@@ -350,141 +349,3 @@ class CreateTestModule(View):
 
         request.session[ADD_TEST_MODULE_RESULT] = CreateTMResult.ADDED.value
         return HttpResponseRedirect("/create/test-module")
-
-    def get_client_ip(self, request):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
-        return ip
-
-class BrowseTest(View):
-    def get(self, request):
-        context = {}
-        login_id = None
-        if LOGIN_ID in request.session :
-            login_id = request.session[LOGIN_ID]
-
-        login_type = None
-        if LOGIN_TYPE in request.session :
-            login_type = request.session[LOGIN_TYPE]
-
-        if login_id and login_type:
-            if login_type == LoginType.ORG:
-                org = OrganizationDB.organization(uno=login_id)
-                if org.valid():
-                    context['org'] = org
-                    context['login'] = True
-
-            elif login_type == LoginType.EMP:
-                user = UserDB.user(uno=login_id)
-                if user.valid():
-                    context['user'] = user
-                    context['login'] = True
-
-        return render(request, "employee/browse-test.html", context)
-# class ScheduleTest(View):
-#     def get(self, request, test_id=None):
-#         context = {}
-#         if LOGIN_ID not in request.session or LOGIN_TYPE not in request.session:
-#             return HttpResponseRedirect("/profile")
-
-#         if request.session[LOGIN_TYPE] == LoginType.ORG:
-#             return HttpResponseRedirect("/profile")
-
-#         user_id = request.session[LOGIN_ID]
-#         user_type = request.session[LOGIN_TYPE]
-
-#         user = UserDB.user(uno = user_id)
-#         if not user.valid():
-#             return HttpResponseRedirect("/profile")
-
-#         if user['role'] != TEST_SUPERVISOR:
-#             return HttpResponseRedirect("/profile")
-
-#         context['user'] = user
-
-#         if SCHEDULE_TEST_MODULE_RESULT in request.session:
-#             schedule_code = request.session[SCHEDULE_TEST_MODULE_RESULT]
-#             context['alert'] = schedule_code
-#             del request.session[SCHEDULE_TEST_MODULE_RESULT]
-
-#         if not test_id:
-#             tests = user.organization().tests()
-#             tests = [t for t in tests if not t['schedule']]
-#             psets = ProblemSetDB.all()
-
-#             for t in tests:
-#                 t['id'] = t['_id']
-#                 t['problem_sets'] = t.problem_sets()
-
-#             context['tests'] = tests
-
-#             return render(request, "employee/schedule-test-browse.html", context)
-
-#         else:
-#             test = TestModuleDB.test_module(uno=test_id)
-#             if not test.valid():
-#                 raise Http404
-#                 return
-
-#             test['id'] = test['_id']
-#             test['problem_sets'] = test.problem_sets()
-
-#             context['test'] = test
-
-#             return render(request, "employee/schedule-test.html", context)
-
-#     def post(self, request, test_id = None):
-#         # validating client
-
-#         if LOGIN_ID not in request.session or LOGIN_TYPE not in request.session:
-#             return HttpResponseRedirect("/profile")
-
-#         if request.session[LOGIN_TYPE] == LoginType.ORG:
-#             return HttpResponseRedirect("/profile")
-
-#         user_id = request.session[LOGIN_ID]
-#         user_type = request.session[LOGIN_TYPE]
-
-#         user = UserDB.user(uno = user_id)
-#         if not user.valid():
-#             return HttpResponseRedirect("/profile")
-
-#         if user['role'] != TEST_SUPERVISOR:
-#             return HttpResponseRedirect("/profile")
-
-#         data = request.POST
-
-#         test = TestModuleDB.test_module(uno=test_id)
-
-#         if not test.valid():
-#             request.session[SCHEDULE_TEST_MODULE_RESULT] = CreateTMResult.SOMETHING_ELSE.value
-#             return HttpResponseRedirect("/schedule-test/")
-
-#         schedule = {
-#                         "date": data.get('date'),
-#                         "time": data.get('time'),
-#                         "duration": data.get('duration')
-#                     }
-
-#         job_offer = {
-#                         "position": data.get('position'),
-#                         "type": data.get('type'),
-#                         "duration": data.get('job-duration'),
-#                         "salary": data.get('salary'),
-#                         "currency": data.get('currency'),
-#                         "office": data.get('office')
-#                     }
-
-#         test['schedule'] = schedule
-#         test['job_offer'] = job_offer
-
-#         if not test.valid():
-#             request.session[SCHEDULE_TEST_MODULE_RESULT] = CreateTMResult.SOMETHING_ELSE.value
-#             return HttpResponseRedirect("/schedule-test/")
-
-#         TestModuleDB.update(test)
-#         request.session[SCHEDULE_TEST_MODULE_RESULT] = CreateTMResult.ADDED.value
-#         return HttpResponseRedirect("/schedule-test/")

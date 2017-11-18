@@ -7,7 +7,8 @@ from home.views import home, profile
 from login.views import LoginHandler, LogoutHandler, RegisterUser, RegisterOrg
 from admin.views import AdminLogin, AdminLogout, AdminProfile, VerifyOrganization
 from organization.views import AddEmployee, RemoveEmployee
-from employee.views import CreateProblemSet, CreateTestModule, BrowseTest
+from employee.views import CreateProblemSet, CreateTestModule
+from tests.views import BrowseTest, ViewTest
 from service.organization import users_data
 from service.test_module import find_tests, remaining_time
 from service.problem_set import find_problem_sets
@@ -34,7 +35,8 @@ urlpatterns = [
     url(r'^create/problem-set$', CreateProblemSet.as_view()),
     url(r'^create/test-module$', CreateTestModule.as_view()),
 
-    url(r'^browse/test$', BrowseTest.as_view()),
+    url(r'^tests$', BrowseTest.as_view()),
+    url(r'^test/(?P<test_id>.*)$', ViewTest.as_view()),
 
     url(r'^service/problem-sets$', find_problem_sets),
     url(r'^service/tests/time$', remaining_time),

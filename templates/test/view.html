@@ -1,0 +1,235 @@
+{% extends 'base.html' %}
+
+{% block title %} Test {% endblock %}
+
+{% block headcss %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'test/view.css' %}">
+{% endblock %}
+
+{% block content %}
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
+            <a class="navbar-brand" href="#">
+                Hiresome
+            </a>
+        </div>
+        {% if login %}
+        <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    {% if user %}
+                    <span class="glyphicon glyphicon-user"></span> {{ user.name }}
+                    {% elif org %}
+                    <span class="glyphicon glyphicon-user"></span> {{ org.name }}
+                    {% endif %}
+                    <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/profile"> Profile </a></li>
+                    <li><a href="/logout?r=/test/{{ test.id }}"> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+        {% else %}
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="/login?r=/test/{{ test.id }}"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+        </ul>
+        {% endif %}
+    </div>
+</nav>
+
+<input type="hidden" id="test_id" value="{{ test.id }}">
+
+<div class="col-xs-12">
+    <div class="row" id="test_head">
+        <div class="col-md-10 col-md-push-1">
+            <div class="row">
+                <div class="col-xs-12 col-md-8">
+                    <h2>{{test.name}}</h2>
+                </div>
+                <div class="col-xs-12 col-md-4">
+                    <div id="schedule-box">
+                        <div id="test_status">
+                            <span id="status" class="{{test.status}}">{{test.status}}</span>
+                        </div>
+                        <div id="test_time" class="schedule-entry">
+                            <div class="head">
+                                OPENS AT
+                            </div>
+                            <div id="time">
+                                {{test.schedule.date}} {{ test.schedule.time }} UTC
+                            </div>
+                        </div>
+                        <div id="test_duration" class="schedule-entry">
+                            <div class="head">
+                                DURATION
+                            </div>
+                            <div id="duration">
+                                {{test.schedule.duration}}
+                            </div>
+                        </div>
+                        {% if test.remaining_time %}
+                        <div id="test_remaining_time" class="schedule-entry">
+                            <div class="head">
+                                {% if test.status == "live" %}
+                                ENDS IN
+                                {% elif test.status == "coming" %}
+                                LIVE IN
+                                {% endif %}
+                            </div>
+                            <div id="remaining_time">
+                                {{test.remaining_time}}
+                            </div>
+                        </div>
+                        {% endif %}
+                        {% if test.status == "live" %}
+                        <div class="schedule-entry">
+                            <a href="/test/start/{{test.id}}">
+                                <div class="btn btn-block" id="give_test_btn">
+                                    START NOW
+                                </div>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>       
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-8" id="test_details">
+                    <div class="entry" id="test_category">
+                        <div class="head">
+                            CATEGORY
+                        </div>
+                        <div id="category_wrapper">
+                            <span class="category">{{test.category}}</span>
+                        </div>
+                    </div>
+                    <div class="entry" id="test_org_name">
+                        <div class="head">
+                            ORGANIZATION
+                        </div>
+                        <div id="org_name">
+                            {{test.organization.name}}
+                        </div>
+                        {% if test.organization.description %}
+                        <div id="org_description">
+                            {{test.organization.description}}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="entry" id="test_description">
+                        <div class="head">
+                            DESCRIPTION
+                        </div>
+                        <div id="description">
+                            {{test.description|linebreaksbr}}
+                        </div>
+                    </div>
+                </div> 
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-md-8" id="test_job_offer">
+                    <div class="row" id="job_head">
+                        <div id="block-title" class="col-xs-12 col-md-3">
+                            JOB DETAILS
+                        </div>
+                        <div id="bolck-border" class="col-xs-12 col-md-9"></div>
+                    </div>
+                    <div class="row entry" id="job_position">
+                        <div class="head col-xs-12 col-md-3">
+                            POSITION
+                        </div>
+                        <div id="position" class="col-xs-12 col-md-9">
+                            {{test.job_offer.position}}
+                        </div>
+                    </div>
+                    <div class="row entry" id="job_salary">
+                        <div class="head col-xs-12 col-md-3">
+                            SALLARY / MONTH
+                        </div>
+                        <div id="salary" class="col-xs-12 col-md-9">
+                            {{test.job_offer.currency}} {{test.job_offer.salary}}
+                        </div>
+                    </div>
+                    <div class="row entry" id="job_type">
+                        <div class="head col-xs-12 col-md-3">
+                            TYPE
+                        </div>
+                        <div id="type" class="col-xs-12 col-md-9">
+                            {{test.job_offer.type}}
+                        </div>
+                    </div>
+                    <div class="row entry" id="job_duration">
+                        <div class="head col-xs-12 col-md-3">
+                            DURATION
+                        </div>
+                        <div id="duration" class="col-xs-12 col-md-9">
+                            {{test.job_offer.duration}}
+                        </div>
+                    </div>
+                    {% if test.job_offer.description %}
+                    <div class="row entry" id="job_description">
+                        <div class="head col-xs-12 col-md-3">
+                            DESCRIPTION
+                        </div>
+                        <div id="description" class="col-xs-12 col-md-9">
+                            {{test.job_offer.description|linebreaksbr}}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div> 
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block bodyjs %}
+
+<script>
+var rem_time_request = null
+$(document).ready(function(){
+
+    {% if test.remaining_time %}
+    var x = setInterval(function() {
+        var test_id = $('#test_id').val()
+        if (rem_time_request)
+        {
+            rem_time_request.abort()
+            rem_time_request = null
+        }
+        rem_time_request = $.ajax({
+
+            type: 'GET',
+            dataType: 'json',
+            url: '/service/tests/time',
+            data: {"id": test_id},
+            success: function(result){
+                data = JSON.parse(result)
+                if (data.result == "error")
+                {
+                    console.log(data.message);
+                    return;
+                }
+
+                time = ""
+                if(data.days != 0)
+                    time += data.days + "d "
+
+                time = data.hours + "h " + data.minutes + "m"
+                $('#remaining_time').html(time)
+            }
+        });
+
+    }, 60000);
+    {% endif %}
+
+});
+</script>
+
+
+{% endblock %}

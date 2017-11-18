@@ -45,3 +45,32 @@ GENERAL_MEMBER = "GN"
 TEST_SUPERVISOR = "SU"
 HR_MANAGER = "HR"
 PROBLEM_SETTER = "PS"
+
+
+# Job Details
+
+class JobType(Enum):
+    WFH = "Work From Home"
+    OFW = "Office Work"
+
+class JobDuration(Enum):
+    MI3 = "3 Month Internship"
+    MI6 = "6 Month Internship"
+    FTE = "Full Time Employment"
+
+class Currency(Enum):
+    INR = "INR"
+    USD = "USD"
+    GBP = "GBP"
+    EUR = "EUR"
+
+# Test Schedule Details
+
+class TestDuration(Enum):
+    TEN      = "10"
+    HALF     = "30"
+    ONE      = "60"
+    ONE_HALF = "90"
+    TWO      = "120"
+    TWO_HALF = "150"
+    THREE    = "180"

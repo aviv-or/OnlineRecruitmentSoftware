@@ -107,12 +107,12 @@ class Job(dict):
 
         self.error = self.Error.NONE
 
-        self['position'] = data.get('position')
-        self['salary']   = data.get('salary')
-        self['currency'] = data.get('currency')
-        self['type']     = data.get('type')
-        self['office']   = data.get('office')
-        self['duration'] = data.get('duration')
+        self['position']    = data.get('position')
+        self['salary']      = data.get('salary')
+        self['currency']    = data.get('currency')
+        self['type']        = data.get('type')
+        self['description'] = data.get('description')
+        self['duration']    = data.get('duration')
 
     def valid(self):
         self.error = self.Error.NONE

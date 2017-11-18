@@ -21,13 +21,16 @@ def is_live_test(test):
 
     return True
 
-def remaining_time(test):
+def remaining_time(test, live=True):
 
     test_date_time = test['schedule']['date']+"-"+test['schedule']['time']
     test_date_time = datetime.strptime(test_date_time, "%d-%m-%Y-%H:%M")
     now = datetime.now()
 
-    end_test_date_time = test_date_time + timedelta(minutes=int(test['schedule']['duration'] ) + 1)
+    if live:
+        end_test_date_time = test_date_time + timedelta(minutes=int(test['schedule']['duration'] ) + 1)
+    else:
+        end_test_date_time = test_date_time
 
     if now > end_test_date_time:
         return 0,0,0
@@ -47,3 +50,13 @@ def is_completed_test(test):
         return True
 
     return False
+
+def pretty_date(test, year=False):
+
+    test_date_time = test['schedule']['date']+"-"+test['schedule']['time']
+    test_date_time = datetime.strptime(test_date_time, "%d-%m-%Y-%H:%M")
+
+    if year:
+        return test_date_time.strftime("%d %B %Y")
+    else:
+        return test_date_time.strftime("%d %B")

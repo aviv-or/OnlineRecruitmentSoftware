@@ -4,7 +4,7 @@
 
 {% block headcss %}
 {% load static %}
-<link rel="stylesheet" type="text/css" href="{% static 'employee/browse-test.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'test/browse.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -30,7 +30,7 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="/profile"> Profile </a></li>
-                    <li><a href="/logout?r=/browse/test"> Logout </a></li>
+                    <li><a href="/logout?r=/tests"> Logout </a></li>
                 </ul>
             </li>
         </ul>
@@ -97,7 +97,7 @@
                 var suggestion = "";
                 for(var test of data.tests)
                 {
-                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4'><a href='"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><h4>"+test.name+"</h4><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='test-schedule-box'><h5><b>Date: </b>"+test.schedule.date+"</h5><h5><b>Time: </b>"+test.schedule.time+" UTC</h5><h5><b>Duration: </b>"+test.schedule.duration+" min</h5></div></div></div></div></a></div>";
+                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4'><a href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><h4>"+test.name+"</h4><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='test-schedule-box'><h5><b>Date: </b>"+test.schedule.date+"</h5><h5><b>Time: </b>"+test.schedule.time+" UTC</h5><h5><b>Duration: </b>"+test.schedule.duration+" min</h5></div></div></div></div></a></div>";
                 }
                 $('#live-test-list').append(suggestion)
             }
@@ -125,7 +125,7 @@
                 var suggestion = "";
                 for(var test of data.tests)
                 {
-                    suggestion += "<a href='"+test.id+"'><div class='col-xs-12 col-md-6 col-lg-4'><div class='test'><div class='row'><div class='col-xs-12'><h4>"+test.name+"</h4><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='test-schedule-box'><h5><b>Date: </b>"+test.schedule.date+"</h5><h5><b>Time: </b>"+test.schedule.time+" UTC</h5><h5><b>Duration: </b>"+test.schedule.duration+" min</h5></div></div></div></div></a></div>";
+                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4'><a href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><h4>"+test.name+"</h4><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='test-schedule-box'><h5><b>Date: </b>"+test.schedule.date+"</h5><h5><b>Time: </b>"+test.schedule.time+" UTC</h5><h5><b>Duration: </b>"+test.schedule.duration+" min</h5></div></div></div></div></a></div>";
                 }
                 $('#upcoming-test-list').append(suggestion)
             }

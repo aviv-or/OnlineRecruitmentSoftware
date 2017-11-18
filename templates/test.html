@@ -8,228 +8,52 @@
 {% endblock %}
 
 {% block content %}
-<div id="pset-window-frame">
-<div class="col-xs-11" id="pset-window">
-    <div class="row">
-        <div id="pset-window-close-btn">
-            <span class="ti-close"></span>
-        </div>
-        <div class="col-xs-12 col-md-4 col-lg-2" id="pset-search-box">
-            <div id="pset-search-box-head">
-               <span class="ti-search"></span> Search
-            </div>
-            <div id="pset-search-form">
-                <div class="field-label">Search Key</div>
-                <div class="form-field col-xs-12">
-                    <select id="search_key" class="field-select">
-                        <option selected value="name">Name</option>
-                        <option value="category">Category</option>
-                    </select>
-                </div>
-                <br><br><br>
-                <div class="field-label">Search Keyword</div>
-                <div class="form-field col-xs-12">
-                    <div class="field-icon"><span class="ti-search"></span></div>
-                    <input id="search_keyword" type="text" placeholder="ex: Algorithm" class="field-input">
-                    <div class="field-clear"><span class="ti-close"></span></div>
-                </div>
-                <br><br>
-                <div class="form-field col-xs-12">
-                    <label><input id="search_public" type="checkbox" value="true"> Public </label>
-                </div>
-            </div>
-        </div>
-        <div class="col-xs-12 col-md-8 col-lg-10" id="pset-directory">
-            <div class="row" id="pset-path">
-                <span id="pset-head">
-                    Problem Sets
-                </span>
-            </div>
-            <div class="row" id="pset-list-view"></div>
-            <div class="row" id="pset-view"></div>
-        </div>
-    </div>
-</div>
 
-</div>
-
+<input type="hidden" id="test_id" value="4ab6e80273f6bf26c5d268be437aefd6">
 
 {% endblock %}
 
 {% block bodyjs %}
 
-<script type="text/javascript">
-var problem_sets_request;
-var questions_request;
-var selected_problem_sets = []
-function get_problem_sets(){
-    if(problem_sets_request)
-        problem_sets_request.abort();
-        problem_sets_request = null;
-    $('#pset-list-view').html("<div class='loader'></div>")
-    s_pub = $('#search_public').is(":checked")
-    s_keyword = $('#search_keyword').val()
-    s_cat = $('#search_key').val()
+<script>
+var rem_time_request = null
+$(document).ready(function(){
 
-    service_url = "/service/problem-sets?"
-    if (s_pub)
-        service_url += "public=true&"
-
-    if(s_keyword != "")
-        service_url += s_cat+"="+s_keyword
-
-    problem_sets_request = $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: service_url,
-        success: function(result){
-            data = JSON.parse(result)
-            if (data.result == "error")
-            {
-                console.log(data.message)
-                return;
-            }
-            if (data.length == 0)
-            {
-                $('#pset-list-view').html("<div id='pset-empty'><div id='empty-icon'><span class='ti-files'></span></div><div id='empty-head'>No Match</div></div>")
-                return;
-            }
-            var org_psets = ""
-            var public_psets = "";
-            var suggestion;
-            for(var pset of data.problem_sets)
-            {
-                suggestion = "<div class='col-xs-6 col-md-4 col-lg-3 pset-space'><div class='height-manager'></div><div class='pset-box'><div class='pset-card'><div class='col-xs-12 pset-name'><input class='pset_name' value='"+pset.name+"' type='hidden'><span class='name'>"+pset.name+"</span></div><div class='pset-category'><span class='ti-tag'></span>"+pset.category+"</div><div class='col-xs-12 pset-org'><span class='ti-user'></span>"+pset.organization.name+"</div></div><div class='pset-card-selector'><div class='pset-view-btn'><span class='ti-eye'></span></div><input class='pset_id' type='hidden' value='"+pset.id+"'></div></div><div class='pset-box-selected"
-                if(selected_problem_sets.indexOf(pset.id) > -1)
-                    suggestion += " pset-box-selected-active"
-                suggestion += "'></div></div>";
-
-                if(pset.organization.id == data.organization)
-                    public_psets += suggestion
-                else
-                    org_psets += suggestion
-            }
-            $('#pset-list-view').html(public_psets)
-            $('#pset-list-view').append(org_psets)
+    var x = setInterval(function() {
+        var test_id = $('#test_id').val()
+        if (rem_time_request)
+        {
+            rem_time_request.abort()
+            rem_time_request = null
         }
-    });
-}
+        rem_time_request = $.ajax({
 
-function get_questions(pset){
-
-    if(questions_request)
-        questions_request.abort();
-        questions_request = null;
-
-    $('#pset-view').html("<div class='loader'></div>")
-    service_url = "/service/problem-sets?id="+pset
-    
-    questions_request = $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: service_url,
-        success: function(result){
-            console.log(result)
-            data = JSON.parse(result)
-            if (data.result == "error")
-            {
-                $('#pset-view').html("<div id='pset-empty'><div id='empty-icon'><span class='ti-face-sad'></span></div><div id='empty-head'>Try Again</div></div>")
-                return;
-            }
-            questions = ""
-            ques = ""
-            for(var q of data.problem_sets[0].questions)
-            {
-                if(q.type == "COD")
+            type: 'GET',
+            dataType: 'json',
+            url: '/service/tests/time',
+            data: {"id": test_id},
+            success: function(result){
+                data = JSON.parse(result)
+                if (data.result == "error")
                 {
-                    ques = "<div class='col-xs-12 question '><div class='row'><div class='qno'>"+q.no+"</div><div class='col-xs-12 qmarks'>"+q.marks+" Marks</div><div class='col-xs-10 qquestion'>"+q.question+"</div><div class='col-xs-12 qinput'>Sample Input<pre>"+q.input+"</pre></div><div class='col-xs-12 qoutput'>Sample Output<pre>"+q.output+"</pre></div><div class='col-xs-12 qtime'>Time Limit<div>"+q.time+" sec</div></div>"
-                    if (q.tag)
-                        ques += "<div class='col-xs-10 qtagwrapper'><div class='qtag'><span class='ti-tag'></span> "+q.tag+"</div></div>"
-                    ques += "</div></div>"
-                }
-                else if(q.type == "OBJ")
-                {
-                    opt = ""
-                    counter = 1 
-                    for(var op of q.options)
-                    {
-                        opt += "<div class='col-xs-10 qoption'>"+counter+". "+op+"</div>"
-                        counter += 1
-                    }
-                    ques = "<div class='col-xs-12 question '><div class='row'><div class='qno'>"+q.no+"</div><div class='col-xs-12 qmarks'>"+q.marks+" Marks</div><div class='col-xs-10 qquestion'>"+q.question+"</div>"+opt
-                    if (q.tag)
-                        ques += "<div class='col-xs-10 qtagwrapper'><div class='qtag'><span class='ti-tag'></span> "+q.tag+"</div></div>"
-                    ques += "</div></div>"
-                }
-                else
-                {
-                    ques = "<div class='col-xs-12 question '><div class='row'><div class='qno'>"+q.no+"</div><div class='col-xs-12 qmarks'></div><div class='col-xs-10 qquestion'>"+q.question+"</div>"
-                    if (q.tag)
-                        ques += "<div class='col-xs-10 qtagwrapper'><div class='qtag'><span class='ti-tag'></span> "+q.tag+"</div></div>"
-                    ques += "</div></div>"
+                    console.log(data.message);
+                    return;
                 }
 
+                time = ""
+                if(data.days != 0)
+                    time += data.days + "d "
 
-                questions += ques;
+                time = data.hours + "h " + data.minutes + "m"
+                $('#time').html(time)
             }
-            $('#pset-path').append("<span class='pset-name'>"+data.problem_sets[0].name+"</span>")
-            $('#pset-view').html(questions)
-        }
-    });
-}
+        });
+        
 
-$( document ).ready(function(){
-
-    $(document).on("click", '#pset-list-view .pset-card-selector', function(event){
-        target = $(event.target)
-        target.parent().parent().find(".pset-box-selected").addClass("pset-box-selected-active");
-        pset_id = target.find('.pset_id').val()
-        selected_problem_sets.push(pset_id)
-    });
-
-    $(document).on("click", '#pset-list-view .pset-box-selected', function(event){
-        target = $(event.target)
-        target.removeClass("pset-box-selected-active")
-        var index = selected_problem_sets.indexOf(target.parent().find('.pset_id').val());
-        if (index > -1) {
-            console.log(index)
-            selected_problem_sets.splice(index, 1);
-        }
-    });
-
-    $(document).on("click", '#pset-list-view .pset-view-btn', function(event) {
-        pset_id = $(event.target).parent().parent().find('.pset_id').val()
-        $("#pset-view").css("display","block")
-        $("#pset-view").css("opacity","1")
-        path = $('#pset-path')
-        path.append("<span class='ti-angle-right'></span>")
-        $("#pset-head").addClass("pset-head-active")
-        get_questions(pset_id);
-    });
-
-    $(document).on("click", ".pset-head-active", function(event){
-        target = $(event.target)
-        target.removeClass('pset-head-active')
-        $("#pset-view").css("opacity","0")
-        $("#pset-view").css("display","none")
-        $("#pset-view").html("")
-        $("#pset-path").html("<span id='pset-head'>Problem Sets</span>")
-    });
-
-    $('#search_keyword').keyup(function(){
-        get_problem_sets();
-    });
-
-    $('#search_key').change(function(){
-        get_problem_sets();
-    })
-
-    $('#search_public').change(function(){
-        get_problem_sets();
-    });
+    }, 60000);
 
 });
-
 </script>
+
 
 {% endblock %}

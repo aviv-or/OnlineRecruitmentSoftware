@@ -92,7 +92,6 @@ def find_problem_sets(request):
 
     if s_id:
         pset = ProblemSetDB.problem_set(uno=s_id)
-        print(json.dumps(pset, indent=4, sort_keys=True))
         if not pset.valid():
             response['result'] = "error"
             response['message'] = "Problem Set Does not exist"

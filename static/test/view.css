@@ -1,0 +1,231 @@
+.red
+{
+    color: red;
+    font-size: 14px;
+}
+
+body {
+    background-color: #fafafa;
+}
+
+#logo {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 40px;
+    height: 40px;
+}
+
+.navbar {
+    margin-bottom: 0;
+    background-color: #0078d7;
+    color: #fff;
+    border: 0;
+    border-radius: 0;
+}
+
+.navbar > .container .navbar-brand,
+.navbar > .container-fluid .navbar-brand {
+    font-family: sans, sans-serif;
+    letter-spacing: 2px;
+    color: #fff;
+    margin-left: 30px;
+}
+
+.navbar-default .navbar-nav > li > a ,
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover,
+.navbar-default .navbar-brand, 
+.navbar-default .navbar-brand:focus, 
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-nav > li > a:focus,
+.navbar-default .navbar-nav > li > a:hover {
+    color: #fff;
+}
+
+.navbar-default .navbar-nav > .open > a,
+.navbar-default .navbar-nav > .open > a:focus,
+.navbar-default .navbar-nav > .open > a:hover {
+    background-color: #0078d7;
+}
+
+@media(max-width: 767px)
+{
+    .navbar-default .navbar-nav .open .dropdown-menu > li > a {
+        color: #fff;
+    }
+}
+
+#test_head {
+    padding-top: 20px;
+    height: 100px;
+    border-bottom: 1px solid #eee;
+    background-color: #fff;
+}
+
+@media(max-width: 767px)
+{
+    #test_head {
+        border: 0;
+        height: auto;
+    }
+}
+
+#test_head h2 {
+    color: #46535e;
+}
+
+@media(max-width: 767px)
+{
+    #test_head h2 {
+        padding-left: 0px;
+        text-align: center;
+    }
+}
+
+#schedule-box {
+    position: absolute;
+    width: 250px;
+    padding: 15px;
+    background-color: #fff;
+    border: 1px solid #eeeeee;
+    color: #46535e;
+}
+
+@media(max-width: 991px)
+{
+    #schedule-box {
+        position: relative;
+        margin-top: 20px;
+        margin-left: 50%;
+        transform: translateX(-50%);
+        border: 0;
+        background-color: inherit;
+    }
+}
+
+#test_status #status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+#test_status .coming {
+    background-color: #ffff53;
+    color: #555;
+}
+
+#test_status .live {
+    background-color: #9c0;
+    color: #fff;
+    font-weight: bold;
+}
+
+#test_status .completed {
+    background-color: crimson;
+    color: #fff;
+    font-weight: bold;
+}
+
+.schedule-entry {
+    margin-top: 15px;
+}
+
+.schedule-entry .head {
+    color: #c1c1c1;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#test_time #time {
+    font-size: 18px;
+}
+
+#test_duration #duration {
+    font-size: 18px;
+}
+
+#remaining_time {
+    letter-spacing: 2px;
+    font-size: 30px;
+    text-align: center;
+}
+
+#give_test_btn {
+    background-color: #9c0;
+    height: 40px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    line-height: 40px;
+    padding: 0;
+}
+
+#test_details, #test_job_offer {
+    font-size: 16px;
+    color: #666;
+    margin: 10px 0px 50px 0px;
+}
+
+#test_details .entry {
+    margin-top: 20px;
+}
+
+#test_details #org_description {
+    margin-top: 10px;
+    color: #999;
+    font-size: 14px;
+}
+
+#test_details .head {
+    color: #c1c1c1;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 15px 0px;
+}
+
+#test_category .category {
+    padding: 5px 10px;
+    background-color: #f1f5f8;
+    border-radius: 20px;
+    border: 1px solid #ececec;
+    font-family: sans;
+}
+
+#test_job_offer .entry {
+    margin-top: 10px;
+    padding: 15px 0px;
+}
+
+#test_job_offer #job_description {
+    border: 0;
+}
+
+#test_job_offer .head {
+    color: #b1b1b1;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#test_job_offer #block-title {
+    color: #46535e;
+    font-size: 20px;
+}
+
+#test_job_offer #bolck-border {
+    content: ' ';
+    border-bottom: 2px solid #ededed;
+}
+
+@media(max-width: 767px)
+{
+    #test_job_offer #bolck-border {
+        content: '';
+        border-bottom: 0;
+    }
+}

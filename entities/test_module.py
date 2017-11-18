@@ -11,7 +11,7 @@ class TestModule(TestModuleData):
 
     def organization(self):
         from db.organization_database import OrganizationDB
-        return OrganizationDB.organization(id=self.get('organization'))
+        return OrganizationDB.organization(uno=self.get('organization'))
 
     def problem_sets(self):
         from entities.problem_set import ProblemSet
