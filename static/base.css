@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300');
-
 .red
 {
     color: red;
@@ -53,58 +51,4 @@
     .navbar-default .navbar-nav .open .dropdown-menu > li > a {
         color: #fff;
     }
-}
-
-
-#test-wrapper{
-    margin-bottom: 50px;
-}
-
-.test{
-    color: #333;
-    padding: 20px 0px;
-    border-bottom: 1px solid #ddd;
-}
-
-.test:first-of-type{
-    border: 0px;
-}
-
-.pset {
-    margin-top: 20px;
-    padding: 15px;
-    height: 100%;
-    width: 100%;
-    border: 1px solid #e0e0e0;
-}
-
-@media(max-width: 768px)
-{
-    .pset {
-        margin: 10px 0px;
-    }
-}
-
-.test-category-box{
-    font-size: 14px;
-    padding: 3px 5px;
-}
-
-.pset-category-box{
-    font-size: 12px;
-    background-color: #eee;
-    padding: 3px 5px;
-    border-radius: 2px;
-}
-
-#job-offering-head {
-    margin-top: 30px;
-}
-
-#form-btns {
-    margin-top: 50px;
-}
-
-#schedule-form {
-    margin-top: 0px;
 }
