@@ -1,25 +1,170 @@
-#banner-internal
-{
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,900');
+
+#banner-image {
+	position: fixed;
+	z-index: -1;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	display: none;
+}
+
+#banner-image img {
+	height: 100vh;
+}
+
+#login-block {
+	background-color: #fff;
+	min-height: 100vh;
+	box-shadow: -5px 0px 10px rgb(103, 22, 231);
+}
+
+#banner-block {
+	color: #fff;
+	display: none;
+	min-height: 100vh;
+}
+
+#banner-block #brand {
+	padding: 20px 0;
+	font-weight: 900;
+	letter-spacing: 0px;
+	font-family: 'Montserrat', sans;
+	font-size: 26px;
+}
+
+#banner-block #motivation {
+	padding: 20px 0;
+	font-family: 'Montserrat', sans;
+	font-size: 60px;
+	font-weight: 200;
+	color: rgb(10,0,20);
+	text-align: center;
+}
+
+#banner-block #back {
+	padding: 20px;
+	background-color: rgba(200,200,255,0.8);
+	border-radius: 20px;
+}
+
+#banner-block #motivation-continue {
+	padding: 0;
+	font-family: 'Montserrat', sans;
+	font-size: 20px;
+	font-weight: 400;
+	color: rgb(200,200,255);
+	text-align: center;
+}
+
+#banner-block #final-thought {
+	text-align: center;
+	padding-top: 50px;
+	color: rgb(10,0,20);
+}
+
+#banner-block #copyright-info {
 	position: absolute;
-	top: 50%;
-	transform: translateY(-50%);
-}
-
-#banner-internal #welcome,#software
-{
+	left: 0;
+	bottom: 0px;
+	width: 100%;
+	padding: 20px 0;
+	font-family: 'Montserrat', sans;
+	font-size: 14px;
+	color: #fff;
 	text-align: center;
-	font-size: 40px;
-	font-weight: bold;
-	letter-spacing: 2;
-	color: #ABB7B7;
 }
 
-#banner-internal #software
-{
-	font-size: 30px;
-}
-
-#ghost-btn {
+#login-block #brand {
+	padding: 20px 0;
+	font-weight: 900;
+	letter-spacing: 0px;
+	font-family: 'Montserrat', sans;
+	font-size: 26px;
+	color: rgb(20,0,60);
 	text-align: center;
-	margin: 25px 0px;
+}
+
+#login-block #copyright-info {
+	position: relative;
+	padding: 40px 0 20px 0;
+	font-family: 'Montserrat', sans;
+	font-size: 12px;
+	color: rgb(10,0,20);
+	text-align: center;
+}
+
+#login-block #head {
+	font-size: 22px;
+	text-align: center;
+	margin-top: 0px;
+	color: rgb(10,0,20);
+	display: none;
+}
+
+#login-block #login {
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+	margin-top: 10px;
+}
+
+#login-block #login .f-field {
+	padding: 0;
+}
+
+#login-block #login button {
+	height: 40px;
+	line-height: 40px;
+	padding: 0;
+	background-color: rgb(10,0,20);
+	color: #fff;
+	border-radius: 5px;
+	box-shadow: 0;
+	border: 0;
+}
+
+#login-block #register {
+	margin-top: 20px;
+	color: #888;
+	font-size: 14px;
+}
+
+#login-block #register a, a:focus, a:hover {
+	color: rgb(20,0,60);
+	text-decoration: none;
+	font-size: 16px;
+}
+
+@media(min-width: 992px)
+{
+	#banner-image {
+		display: block;
+	}
+
+	#banner-block {
+		display: block;
+	}
+
+	#login-block #copyright-info {
+		display: none;
+	}
+
+	#login-block #brand {
+		display: none;
+	}
+
+	#login-block #login {
+		margin-top: 50px;
+	}
+
+	#login-block #head {
+		margin-top: 100px;
+		display: block;
+	}
+
+	#banner-block #motivation-continue {
+		padding: 0 150px;
+	}
 }

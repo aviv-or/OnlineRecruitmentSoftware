@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %}Welcome{% endblock %}
+{% block title %}Hiresome{% endblock %}
 
 {% block headcss %}
 {% load static %}
@@ -9,32 +9,66 @@
 
 {% block content %}
 
-<nav class="navbar navbar-default">
-	<div class="container-fluid">
-		<div class="navbar-header">
-            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
-            <a class="navbar-brand" href="#">
-                Hiresome
-            </a>
+<div id="banner-image">
+    <img src="{% static 'image/violet-banner-sharp.jpeg' %}">
+</div>
+<div class="col-xs-12 col-md-6 col-lg-8" id="banner-block">
+    <div id="brand">
+        HIRESOME
+    </div>
+    <div id="motivation">
+        Hiring is Easy
+    </div>
+    <div id="motivation-continue"> 
+        Redifine your measure of industry professionals. Acquire right talent faster than ever with the Perfect Tests, for the Perfect Hire
+    </div>
+    <div id="final-thought">
+        <span id="back">Make Powerful and Precise People Decisions</span>
+    </div>
+    <div id="copyright-info">
+        &copy;2017 HIRESOME | All Rights Reserved
+    </div>
+</div>
+<div class="col-xs-12 col-md-6 col-lg-4" id="login-block">
+    <div class="row">
+        <div id="brand">
+            HIRESOME
         </div>
-		<ul class="nav navbar-nav">
-			<!-- <li class="active"><a href="#">Home</a></li> -->
-		</ul>
-		<ul class="nav navbar-nav navbar-right">
-			<li><a href="/login?r=/profile"><span class="glyphicon glyphicon-log-in"> Login </a></li>
-		</ul>
-	</div>
-</nav>
-
-<div class="container-fluid" id="banner">
-	<div class="row">
-		<div class="col-sm-10 col-sm-push-1"  id="banner-internal">
-			<div id="welcome">Welcome to</div><div id="software">Online Assessment and Employee Recruitment Software</div>
-			<div id="ghost-btn">
-				<a href="tests"><button class="btn btn-lg btn-primary">Give Test</button></a>
-			</div>
-		</div>
-	</div>
+        <div id="head">
+            Log into Hiresome
+        </div>
+        <div id="login" class="col-xs-12 col-lg-10 col-lg-push-1">
+            <form method="post" action="/login"> {% csrf_token %}
+                <div class="col-xs-12 f-field ">
+                    <div class="f-field-label">Email <span class='red'>*</span> </div>
+                    <div  class="col-xs-12 f-input">
+                        <input required="required" type="email" id="email" name="email">
+                    </div>
+                </div>
+                <div class="col-xs-12 f-field ">
+                    <div class="f-field-label">Password <span class='red'>*</span> </div>
+                    <div  class="col-xs-12 f-input">
+                        <input required="required" type="password" id="pwd" name="pwd">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" name="org">
+                        <span id="org">Login as Organization</span>
+                    </label>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block">Log In</button>
+                </div>
+            </form>
+        </div>
+        <div id="register" class="col-xs-12 col-lg-10 col-lg-push-1">
+            <span id="question">Don't have an account ? <a href ="/register/user">Create Account</a> </span>
+        </div>
+        <div id="copyright-info" class="col-xs-12 col-lg-10 col-lg-push-1">
+            &copy;2017 HIRESOME | All Rights Reserved
+        </div>
+    </div>
 </div>
 
 {% endblock %}
