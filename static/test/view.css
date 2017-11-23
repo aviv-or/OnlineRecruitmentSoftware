@@ -1,3 +1,37 @@
+body {
+    background-color: #f6f6f6;
+}
+
+#loader_box {
+    display: none;
+    height: 60px;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
 #test_head {
     padding-top: 20px;
     height: 100px;
@@ -109,6 +143,16 @@
     padding: 0;
 }
 
+#analyze_test_btn {
+    background-color: #f2f2f2;
+    height: 40px;
+    border-radius: 5px;
+    color: crimson;
+    font-weight: bold;
+    line-height: 40px;
+    padding: 0;
+}
+
 #test_details, #test_job_offer {
     font-size: 16px;
     color: #666;
@@ -173,4 +217,39 @@
         content: '';
         border-bottom: 0;
     }
+}
+
+#review_block {
+    padding: 50px 0;
+}
+
+#review_block #head {
+    color: #b1b1b1;
+    font-size: 14px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#review_block #review_list {
+    padding-top: 20px;
+}
+
+.review-wrapper {
+    padding-top: 20px;
+}
+
+.review {
+    background-color: #fff;
+    color: #333;
+    padding: 20px;
+}
+
+#review_block #load_more {
+    margin-top: 20px;
+    height: 40px;
+    background-color: #fff;
+    line-height: 40px;
+    text-transform: uppercase;
+    text-align: center;
+    cursor: pointer;
 }

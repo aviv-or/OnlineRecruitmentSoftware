@@ -17,14 +17,31 @@
                 Hiresome
             </a>
         </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/tests"> Browse Tests </a></li>
+        </ul>
         <ul class="nav navbar-nav navbar-right">
+            {% if user.role == "PS" or user.role == "SU" %}
+             <li class="dropdown">
+                <a class="dropdown-toggle" id="nav-action-box" data-toggle="dropdown" href="#">
+                    <span class="fa fa-plus" id="plus-btn"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {% if user.role == "PS" %}
+                    <li><a href="/create/problem-set">Create Problem Set</a></li>
+                    {% elif user.role == "SU" %}
+                    <li><a href="/create/test-module">Create Test Module</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-user"></span> {{ user.name }}
-                    <span class="caret"></span>
+                <a class="dropdown-toggle" id="account-btn-box" data-toggle="dropdown" href="#">
+                    <span id="account-btn">{{user.initial}}</span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="/profile"> Profile </a></li>
-                    <li><a href="/logout?redirect=/"> Logout </a></li>
+                    <li><a href="/logout?r=/"> Logout </a></li>
                 </ul>
             </li>
         </ul>

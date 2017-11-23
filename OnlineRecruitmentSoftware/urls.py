@@ -8,9 +8,10 @@ from login.views import LoginHandler, LogoutHandler, RegisterUser, RegisterOrg
 from admin.views import AdminLogin, AdminLogout, AdminProfile, VerifyOrganization
 from organization.views import AddEmployee, RemoveEmployee
 from employee.views import CreateProblemSet, CreateTestModule
-from tests.views import BrowseTest, ViewTest
+from tests.views import BrowseTest, ViewTest, StartTest
 from service.organization import users_data
-from service.test_module import find_tests, remaining_time
+from service.test_module import find_tests, remaining_time, questions,\
+                                save_response, save_review, reviews
 from service.problem_set import find_problem_sets
 from service.test import test
 from service import user
@@ -36,10 +37,15 @@ urlpatterns = [
     url(r'^create/test-module$', CreateTestModule.as_view()),
 
     url(r'^tests$', BrowseTest.as_view()),
+    url(r'^test/start/(?P<test_id>.*)$', StartTest.as_view()),
     url(r'^test/(?P<test_id>.*)$', ViewTest.as_view()),
 
     url(r'^service/problem-sets$', find_problem_sets),
     url(r'^service/tests/time$', remaining_time),
+    url(r'^service/tests/question$', questions),
+    url(r'^service/tests/reviews$', reviews),
+    url(r'^service/tests/save_response$', save_response),
+    url(r'^service/tests/save_review$', save_review),
     url(r'^service/tests$', find_tests),
     url(r'^service/user/update$', user.change),    
     url(r'^service/users-data$', users_data),    

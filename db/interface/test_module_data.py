@@ -10,6 +10,7 @@ class TestModuleData(dict):
         self['description']  = None
         self['organization'] = None
         self['submissions']  = None
+        self['reviews']      = {}
         self['problem_sets'] = []
         self['schedule']     = {}
         self['job_offer']    = {}
@@ -22,6 +23,7 @@ class TestModuleData(dict):
         self['organization'] = data.get('organization')
         self['problem_sets'] = data.get('problem_sets', [])
         self['submissions']  = data.get('submissions')
+        self['reviews']      = data.get('reviews', {})
 
         if data.get('schedule'):
             self['schedule']     = TestSchedule(data.get('schedule', {}))

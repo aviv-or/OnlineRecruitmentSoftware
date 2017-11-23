@@ -2,7 +2,7 @@ from db.interface.submission import SubmissionData
 
 class Submission(SubmissionData):
     def __init__(self, data=None):
-        super().__init()
+        super().__init__()
 
         if data:
             super().load(data)
@@ -21,14 +21,20 @@ class Submission(SubmissionData):
         pset = self['responses'].get(pset_id)
         if not pset:
             return None
-        return pset.get(q_no)
+        return pset.get(str(q_no))
+
+    def save_response(self, pset_id, q_no, answer):
+        if self['responses'].get(pset_id):
+            self['responses'][pset_id][q_no] = answer
+        else:
+            self['responses'][pset_id] = {q_no: answer}
 
     def valid(self, safe=True):
         if not super().valid():
             return False
 
         if safe:
-            if not self.get('id'):
+            if not self.get('_id'):
                 self.error = self.Error.DOES_NOT_EXIST
                 return False
 

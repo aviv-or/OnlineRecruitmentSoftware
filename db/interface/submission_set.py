@@ -1,4 +1,4 @@
-import enum
+from enum import Enum
 
 class SubmissionSetData(dict):
 
@@ -10,9 +10,9 @@ class SubmissionSetData(dict):
     def load(self, data):
         self['_id']             = data.get('_id')
         self['test']            = data.get('test')
-        self['submissions']     = data.get('submissions')
+        self['submissions']     = data.get('submissions', {})
 
-    def valid(self, submission=False):
+    def valid(self):
         self.error = self.Error.NONE
 
         if not self.get('test'):
@@ -23,7 +23,7 @@ class SubmissionSetData(dict):
 
         return True
 
-    class Error(enum.Enum):
+    class Error(Enum):
         NONE                    = "None"
         DOES_NOT_EXIST          = "Does Not Exist"
         TEST                    = "Does Not Belong to any Test"

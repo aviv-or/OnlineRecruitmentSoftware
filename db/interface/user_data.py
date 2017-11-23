@@ -14,7 +14,7 @@ class UserData(dict):
         self['password']        = None
         self['organization']    = None
         self['role']            = None
-        self['submissions']     = []
+        self['submissions']     = {}
 
     def load(self, data):
         self['_id']             = data.get('_id')
@@ -25,7 +25,7 @@ class UserData(dict):
         self['password']        = data.get('password')
         self['organization']    = data.get('organization')
         self['role']            = data.get('role')
-        self['submissions']     = data.get('submissions', [])
+        self['submissions']     = data.get('submissions', {})
 
     def valid(self):
         self.error = self.Error.NONE

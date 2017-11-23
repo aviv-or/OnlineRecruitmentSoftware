@@ -1,3 +1,7 @@
+body {
+    background-color: #fdfdfd;
+}
+
 .loader {
     border: 4px solid #f3f3f3;
     border-radius: 50%;
@@ -27,7 +31,7 @@
     top: 0;
     height: 100%;
     width: 100%;
-    background-color: rgba(30,30,30,0.8);
+    background-color: rgba(255,255,255,0.8);
     overflow-y: auto;
     -webkit-touch-callout: none;
     -webkit-user-select: none; 
@@ -586,6 +590,7 @@
 
 .active-tab-form {
     display: block;
+    background-color: #fff;
 }
 
 .duration-card  {

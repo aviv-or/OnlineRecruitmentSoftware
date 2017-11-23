@@ -1,0 +1,373 @@
+body {
+    background-color: #f2f2f2;
+}
+
+#loader-box {
+    position: absolute;
+    top: 0;
+    left: 15px;
+    width: calc(100% - 30px);
+    height: 100%;
+    background-color: rgba(255,255,255,0.8);
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% { -webkit-transform: rotate(0deg); }
+    100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+#test_head {
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+    color: #46535e;
+    background-color: #fff;
+}
+
+#test_name {
+    font-size: 20px;
+}
+
+#time-block {
+    margin-top: 20px;
+    background-color: #fff;
+    border: 1px solid #eee;
+    padding: 30px 0;
+}
+
+#remaining_time {
+    text-align: center;
+    font-size: 30px;
+}
+
+#test_questions_box {
+    margin-top: 20px;
+}
+
+@media(max-width: 767px)
+{
+    #test_questions_box {
+        padding: 0;
+    }
+}
+
+#test_questions_category_box {
+    background-color: #fff;
+    margin-top: 20px;
+    border: 1px solid #eee;
+}
+
+#questions_category_box_head {
+    border-bottom: 0;
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.questions_category {
+    background-color: #f6f6f6;
+    padding: 15px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.questions_box {
+    padding: 15px;
+    border-bottom: 0;
+    border-top: 0;
+}
+
+.question_no {
+    border: 1px solid #eee;
+    height: 50px;
+    line-height: 50px;
+    text-align: center;
+    font-size: 18px;
+    cursor: pointer;
+}
+
+.completed_question:after {
+    content: '\e64c';
+    font-family: 'themify';
+    position: absolute;
+    font-size: 10px;
+    line-height: 20px;
+    border-radius: 10px;
+    font-weight: bolder;
+    width: 20px;
+    height: 20px;
+    top: -10px;
+    left: calc(100% - 10px);
+    color: #fff;
+    background-color: #87D37C;
+}
+
+.active_question {
+    border: 3px solid dodgerblue;
+}
+
+@media(max-width: 767px)
+{
+    #test_head {
+        margin-top: 20px;
+        border-bottom: 0;
+    }
+    #test_name {
+        font-size: 22px;
+    }
+    #remaining_time {
+        margin-top: 30px;
+    }
+}
+
+.question {
+    background-color: #fff;
+    border: 1px solid #eee;
+    padding: 15px;
+}
+
+.dummy-question {
+    height: 200px;
+}
+
+.qcategory {
+    
+}
+
+.qquestion {
+    font-size: 16px;
+    color: #444;
+    padding: 15px;
+    font-family: sans;
+}
+
+.qdata {
+    padding: 25px 15px;
+}
+
+.qdata textarea {
+    height: 80px;
+    font-size: 16px;
+    width: 100%;
+    padding: 5px;
+}
+
+.qoption {
+    padding: 15px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.qoption:hover {
+    background-color: #eee;
+}
+
+.qselected {
+    background-color: #f1f5f8;
+    color: #111;
+}
+
+#action_block {
+    line-height: 50px;
+    height: 50px;
+    font-size: 16px;
+    margin: 30px 0 20px 0;
+}
+
+#btn_block {
+    background-color: #fff;
+    border: 1px solid #eee;
+    padding: 0;
+}
+
+.action-btn {
+    cursor: pointer;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+}
+
+.btn-wrap {
+    padding: 0;
+}
+
+@media(max-width: 767px)
+{
+    #prev_btn {
+        border-right: 1px solid #f3f3f3;
+    }
+}
+
+.action-btn:hover {
+    background-color: #f9f9f9;
+}
+
+#notification-wrapper, #review-wrapper {
+    position: fixed;
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+    background-color: rgba(255,255,255,0.7);
+}
+
+.notification-box, .review-box {
+    position: absolute;
+    width: 400px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    background-color: #fdfdff;
+    box-shadow: 0px 0px 10px rgb(70,70,70,0.3);
+    padding: 15px;
+    transition: all 1s;
+    -webkit-transition: all 1s;
+}
+
+.notification-box #head{
+    font-size: 18px;
+    text-align: center;
+    padding: 0 0 20px 0;
+}
+
+#notification-btns, #review-btns {
+    padding: 10px 0 0 0;
+}
+
+.notification-box .inline {
+    display: inline-block;
+}
+
+.notification-box .action {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    color: rgb(30,30,45);
+    font-size: 14px;
+}
+
+.notification-box #action-cancel, #action-save {
+    background-color: #fff;
+    border: 2px solid rgb(30,30,35);
+}
+
+.notification-box #action-save:hover {
+    background-color: rgb(30,30,35);
+    color: #fff;
+}
+
+.notification-box #no-btn, #yes-btn {
+    padding: 20px 7px 0 7px;
+}
+
+.notification-box #no-btn {
+    padding-left: 0;
+}
+
+.notification-box #save-btn {
+    padding-right: 0;
+}
+
+@media(max-width: 991px)
+{
+    .notification-box {
+        width: 380px;
+    }
+
+    .notification-box #cancel-btn, #save-btn, #no-btn, #yes-btn
+    {
+        padding: 20px 0 0 0;
+    }
+}
+
+@media(max-width: 767px)
+{
+    .notification-box {
+        width: 280px;
+    }
+}
+
+.review-box #head{
+    font-size: 18px;
+    text-align: center;
+    padding: 0 0 20px 0;
+}
+
+#review-btns, #review-btns {
+    padding: 10px 0 0 0;
+}
+
+.review-box .inline {
+    display: inline-block;
+}
+
+.review-box .action {
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    cursor: pointer;
+    color: rgb(30,30,45);
+    font-size: 14px;
+}
+
+.review-box #action-cancel, #action-save {
+    background-color: #fff;
+    border: 2px solid rgb(30,30,35);
+}
+
+.review-box #action-save:hover {
+    background-color: rgb(30,30,35);
+    color: #fff;
+}
+
+.review-box #cancel-btn, #save-btn {
+    padding: 20px 7px 0 7px;
+}
+
+.review-box #cancel-btn {
+    padding-left: 0;
+}
+
+.review-box #save-btn {
+    padding-right: 0;
+}
+
+@media(max-width: 991px)
+{
+    .review-box {
+        width: 380px;
+    }
+
+    .review-box #cancel-btn, #save-btn
+    {
+        padding: 20px 0 0 0;
+    }
+}
+
+@media(max-width: 767px)
+{
+    .review-box {
+        width: 280px;
+    }
+}

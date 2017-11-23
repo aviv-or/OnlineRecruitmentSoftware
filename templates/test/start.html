@@ -1,0 +1,588 @@
+{% extends 'base.html' %}
+
+{% block title %} {{ test.name }} {% endblock %}
+
+{% block headcss %}
+{% load static %}
+    
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{% static 'test/start.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
+            <a class="navbar-brand" href="#">
+                Hiresome
+            </a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/tests"> Browse Tests </a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            {% if user.role == "PS" or user.role == "SU" %}
+             <li class="dropdown">
+                <a class="dropdown-toggle" id="nav-action-box" data-toggle="dropdown" href="#">
+                    <span class="fa fa-plus" id="plus-btn"></span>
+                </a>
+                <ul class="dropdown-menu">
+                    {% if user.role == "PS" %}
+                    <li><a href="/create/problem-set">Create Problem Set</a></li>
+                    {% elif user.role == "SU" %}
+                    <li><a href="/create/test-module">Create Test Module</a></li>
+                    {% endif %}
+                </ul>
+            </li>
+            {% endif %}
+            <li class="dropdown">
+                <a class="dropdown-toggle" id="account-btn-box" data-toggle="dropdown" href="#">
+                    <span id="account-btn">{{user.initial}}</span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a href="/profile"> Profile </a></li>
+                    <li><a href="/logout?r=/"> Logout </a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</nav>
+
+<input type="hidden" id="test_id" value="{{test.id}}">
+
+<div class="col-xs-12">
+    <div class="row" id="test_head">
+        <div class="col-xs-12 col-md-8 col-lg-7 col-lg-push-1">
+            <div id="test_name">
+                {{test.name}}
+            </div>
+        </div><!-- 
+        <div class="col-xs-12 col-md-4 col-lg-3 col-lg-push-1">
+            <div id="remaining_time">
+                {{test.remaining_time}}
+            </div>
+        </div> -->
+    </div>
+</div>
+
+<div class="col-xs-12 col-md-4 col-lg-3 col-lg-push-8">
+    <div class="row">
+        <div class="col-xs-12" id="time-block">
+            <div id="remaining_time">
+                {{test.remaining_time}}
+            </div>
+        </div>
+
+        <div class="col-xs-12" id="test_questions_category_box">
+            <div class="row">
+                <div id="questions_category_box_head" class="col-xs-12">
+                    CATEGORY
+                </div>
+                {% for pset in test.problem_sets %}
+                <div class="questions_category col-xs-12" data-toggle="collapse" data-target="#qnob{{pset.id}}">
+                    {{ pset.category }}
+                </div>
+                <div class="questions_box col-xs-12 collapse" id="qnob{{pset.id}}">
+                    <div class="row">
+                        {% for q in pset.questions %}
+                        <div class="col-xs-3">
+                            {% if q.submitted_data %}
+                            <div class="col-xs-12 question_no completed_question" id="{{pset.id}}_{{q.no}}" category="{{pset.id}}" no="{{q.no}}">{{q.no}}</div>
+                            {% else %}
+                            <div class="col-xs-12 question_no" id="{{pset.id}}_{{q.no}}" category="{{pset.id}}" no="{{q.no}}">{{q.no}}</div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xs-12 col-md-8 col-lg-7 col-lg-pull-2">
+    <div class="row">
+        <div class="col-xs-12" id="test_questions_box">
+            <div id="question_wrapper"><div class="dummy-question"></div></div>
+            <div id="loader-box"><div class="loader"></div></div>
+        </div>
+
+        <div class="col-xs-12" id="action_block">
+            <div id="btn_block" class="col-xs-12">
+                <div class="col-xs-6 col-md-4 col-lg-2 btn-wrap">
+                    <div class="action-btn" id="prev_btn">
+                        PREV
+                    </div>
+                </div>
+                <div class="col-xs-6 col-md-4 col-md-push-4 col-lg-2 col-lg-push-8 btn-wrap" style="text-align: right;">
+                    <div class="action-btn" id="next_btn">
+                        NEXT
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="notification-wrapper">
+    <div class="notification-box">
+        <div id="head" >
+            Few Minutes Remaining.<br>Want to Save Your Work ?
+        </div>
+        <div id="notification-btns">
+            <div id="action-btn-inner">
+                <div class="col-xs-12 col-md-6" id="no-btn">
+                    <div class="action col-xs-12" id="action-no">
+                        No
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6" id="yes-btn">
+                    <div class="action col-xs-12" id="action-yes">
+                        Yes
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="review-wrapper">
+    <div class="review-box">
+        <div id="head" >
+            Want to Give a Review?
+        </div>
+        <div id="review-input" class="row">
+            <div class="col-xs-12 f-field ">
+                <div  class="col-xs-12 f-textarea" id="test_description">
+                    <textarea id="test_review"></textarea>
+                </div>
+            </div>
+        </div>
+        <div id="review-btns">
+            <div id="action-btn-inner">
+                <div class="col-xs-12 col-md-6" id="cancel-btn">
+                    <div class="action col-xs-12" id="action-cancel">
+                        Cancel
+                    </div>
+                </div>
+                <div class="col-xs-12 col-md-6" id="save-btn">
+                    <div class="action col-xs-12" id="action-save">
+                        Save
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block bodyjs %}
+
+<script>
+var rem_time_request = null
+var load_question_request = null
+var save_response_request = null
+var notification_shown = false
+
+function searching_on()
+{
+    $('.loader').css("border-top", "4px solid #3498db");
+    $('#loader-box').css("display", "block")
+}
+
+function searching_off()
+{
+    $('#loader-box').css("display", "none")
+}
+
+function saving_response()
+{
+    $('.loader').css("border-top", "4px solid #87D37C");
+    $('#loader-box').css("display", "block")
+}
+
+function load_question(category, question)
+{
+    id = $('#test_id').val()
+    if(load_question_request)
+    {
+        load_question_request.abort()
+        load_question_request = null
+    }
+    searching_on()
+    load_question_request = $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: '/service/tests/question',
+        data: {"id": id, "category": category, "question": question},
+        success: function(result){
+            data = JSON.parse(result)
+            if (data.result == "error")
+            {
+                console.log(data.message);
+                return;
+            }
+            $('.active_question').removeClass('active_question')
+            $("#"+category+"_"+question).addClass('active_question')
+
+            ques = data.question
+
+            ques_html = "<div class='question col-xs-12'><div class='col-xs-12 qquestion'>"+ques.question.replace(/\n/g,"<br>")+"</div>"
+            if(ques.type == "OBJ")
+            {
+                ques_html += "<div class='col-xs-12 qobjectivedata qdata'>"
+                if(data.submitted_data)
+                {
+                    ques_html += "<input type='hidden' id='answer' value='"+data.submitted_data+"'>"
+                    ques_html += "<input type='hidden' id='answer_check' value='"+data.submitted_data+"'>"
+                }
+                else
+                {
+                    ques_html += "<input type='hidden' id='answer'>"
+                    ques_html += "<input type='hidden' id='answer_check'>"
+                }
+                for(op in ques.options)
+                {
+                    index = parseInt(op) + 1
+                    if(index == parseInt(data.submitted_data))
+                    {
+                        ques_html += "<div class='qoption qselected' qno='"+index+"'>"+ques.options[op]+"</div>"
+                    }
+                    else
+                    {
+                        ques_html += "<div class='qoption' qno='"+index+"'>"+ques.options[op]+"</div>"
+                    }
+                }
+                ques_html += "</div>"
+            }
+            else if (ques.type == "SUB")
+            {
+                submitted_data = ""
+                if(data.submitted_data)
+                    submitted_data = data.submitted_data
+                ques_html += "<div class='col-xs-12 qsubjectivedata qdata'><input type='hidden' id='answer_check' value='"+submitted_data+"'><div class='row'><div class='col-xs-12 f-field '><div class='f-field-label'>ANSWER </div><div class='col-xs-12 f-textarea'><textarea id='answer'>"+submitted_data+"</textarea></div></div></div></div>"
+            }
+            else if (ques.type == "COD")
+            {
+                submitted_data = ""
+                if(data.submitted_data)
+                    submitted_data = data.submitted_data
+                ques_html += "<div class='col-xs-12 qcodingdata qdata'><input type='hidden' id='answer_check' value='"+submitted_data+"'><div class='row'><div class='col-xs-12 f-field '><div class='f-field-label'>LANGUAGE</div><div class='col-xs-6 col-md-2 f-select'><select name='{{pset.id}}_{{q.no}}_lang'><option value='C'>C</option><option value='C++'>C++</option><option value='C++11'>C++11</option><option value='Python'>Python</option><option value='Python3'>Python3</option><option value='JAVA'>JAVA</option><option value='JAVA8'>JAVA8</option></select></div></div><div class='col-xs-12 f-field '><div class='f-field-label'>CODE</div><div class='col-xs-12 f-textarea'><textarea id='answer' spellcheck='false'>"+submitted_data+"</textarea></div></div></div></div>"
+            }
+
+            ques_html += "</div></div>"
+
+            $('#question_wrapper').html(ques_html)
+            if(data.answer)
+                $('#'+category+"_"+question).addClass("completed_question")
+
+            searching_off()
+        }
+    });
+}
+
+function load_next_question()
+{
+    next_question = $('.active_question').parent().next().find('.question_no')
+    if (next_question.length == 0)
+    {
+        next_question = $('.active_question').closest('.questions_box').next().next().find('.question_no').first()
+    }
+    if(next_question.length == 0)
+    {
+        searching_off()
+        return;
+    }
+    load_question(next_question.attr('category'), next_question.attr('no'))
+}
+
+function load_prev_question()
+{
+    prev_question = $('.active_question').parent().prev().find('.question_no')
+    if (prev_question.length == 0)
+    {
+        prev_question = $('.active_question').closest('.questions_box').prev().prev().find('.question_no').last()
+    }
+    if(prev_question.length == 0)
+    {
+        searching_off()
+        return;
+    }
+    load_question(prev_question.attr('category'), prev_question.attr('no'))
+}
+
+
+function save_and_load_next()
+{
+    test_id = $('#test_id').val();
+    target = $('.active_question')
+    category = target.attr('category')
+    question = target.attr('no')
+    response = $('#answer').val();
+    response_check = $('#answer_check').val()
+
+    if (response == response_check)
+    {
+        load_next_question()
+        return;
+    }
+
+    saving_response()
+    if(save_response_request)
+    {
+        save_response_request.abort()
+        save_response_request = null
+    }
+    save_response_request = $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: '/service/tests/save_response',
+        data: {"id": id, "category": category, "question": question, "response": response },
+        success: function(result){
+            data = JSON.parse(result)
+            if (data.result == "error")
+            {
+                console.log(data.message);
+                searching_off();
+                return;
+            }
+            if(response == "" || response == null)
+            {
+                target.removeClass('completed_question')
+                console.log("Removed")
+                console.log(target)
+            }
+            else
+            {
+                target.addClass('completed_question')
+            }
+            $('#answer_check').val($('#answer').val())
+            load_next_question()
+        }
+    });
+}
+
+function save_and_load_prev()
+{
+    test_id = $('#test_id').val();
+    target = $('.active_question')
+    category = target.attr('category')
+    question = target.attr('no')
+    response = $('#answer').val();
+    response_check = $('#answer_check').val()
+
+    if (response == response_check)
+    {
+        load_prev_question()
+        return;
+    }
+
+    saving_response()
+    if(save_response_request)
+    {
+        save_response_request.abort()
+        save_response_request = null
+    }
+    save_response_request = $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: '/service/tests/save_response',
+        data: {"id": id, "category": category, "question": question, "response": response },
+        success: function(result){
+            data = JSON.parse(result)
+            if (data.result == "error")
+            {
+                console.log(data.message);
+                searching_off();
+                return;
+            }
+            if(response == "" || response == null)
+            {
+                target.removeClass('completed_question')
+                console.log("Removed")
+                console.log(target)
+            }
+            else
+            {
+                target.addClass('completed_question')
+            }
+            $('#answer_check').val($('#answer').val())
+            load_prev_question()
+        }
+    });
+}
+
+function save_and_load(l_category, l_question)
+{
+    test_id = $('#test_id').val();
+    target = $('.active_question')
+    category = target.attr('category')
+    question = target.attr('no')
+    response = $('#answer').val();
+    response_check = $('#answer_check').val()
+
+    if (response == response_check)
+    {
+        load_question(l_category, l_question)
+        return;
+    }
+
+    saving_response()
+    if(save_response_request)
+    {
+        save_response_request.abort()
+        save_response_request = null
+    }
+    save_response_request = $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: '/service/tests/save_response',
+        data: {"id": id, "category": category, "question": question, "response": response },
+        success: function(result){
+            data = JSON.parse(result)
+            if (data.result == "error")
+            {
+                console.log(data.message);
+                searching_off();
+                return;
+            }
+            if(response == "" || response == null)
+            {
+                target.removeClass('completed_question')
+                console.log("Removed")
+                console.log(target)
+            }
+            else
+            {
+                target.addClass('completed_question')
+            }
+            $('#answer_check').val($('#answer').val())
+            load_question(l_category, l_question)
+        }
+    });
+}
+
+function save_review(review)
+{
+    test_id = $('#test_id').val();
+
+    save_review_request = $.ajax({
+        type: 'GET',
+        dataType: 'json',
+        url: '/service/tests/save_review',
+        data: {"id": test_id, "review": review},
+        success: function(result){
+            window.location.replace("/test/{{test.id}}");
+        }
+    });
+}
+
+$(document).ready(function(){
+
+    var x = setInterval(function() {
+        var test_id = $('#test_id').val()
+        if (rem_time_request)
+        {
+            rem_time_request.abort()
+            rem_time_request = null
+        }
+        rem_time_request = $.ajax({
+
+            type: 'GET',
+            dataType: 'json',
+            url: '/service/tests/time',
+            data: {"id": test_id, "include": "duration"},
+            success: function(result){
+                data = JSON.parse(result)
+                if (data.result == "error")
+                {
+                    console.log(data.message);
+                    return;
+                }
+
+                time = ""
+                if(data.days != 0)
+                    time += data.days + "d "
+
+                time = data.hours + "h " + data.minutes + "m"
+                $('#remaining_time').html(time)
+
+                if(data.days == 0 && data.hours == 0 && data.minutes < 4 && !notification_shown)
+                {
+                    $('#notification-wrapper').css("display", "block")
+                    $('#remaining_time').css("color", "red")
+                    notification_shown = true;
+                }
+                if(data.days == 0 && data.hours == 0 && data.minutes == 0)
+                {
+                    window.setTimeout(function(){
+                        $('review-wrapper').css("display", "block");
+                    },2000);
+                }
+            }
+        });
+
+    }, 60000);
+
+    $('.question_no').click(function(event){
+        target = $(event.target)
+        category = target.attr('category')
+        question = target.attr('no')
+        save_and_load(category, question)
+    });
+
+    $('#next_btn').click(function(event){
+        save_and_load_next()
+    });
+
+    $('#prev_btn').click(function(event){
+        save_and_load_prev()
+    });
+
+    first_question  = $('#test_questions_category_box').find('.question_no').first()
+    load_question(first_question.attr('category'), first_question.attr('no'))
+
+    $('#action-no').click(function(){
+        $('#notification-wrapper').css("display", "none")
+    });
+
+    $('#action-yes').click(function(){
+        target = $('.active_question')
+        category = target.attr('category')
+        question = target.attr('no')
+        save_and_load(category, question)
+        $('#notification-wrapper').css("display", "none");
+    });
+
+    $('#action-cancel').click(function(){
+        window.location.replace("/test/{{test.id}}");
+    });
+
+    $('#action-save').click(function(){
+        review = $('#test_review').val()
+        if(review == null || review == "")
+            return;
+        save_review(review);
+        $('#notification-wrapper').css("display", "none");
+    });
+
+});
+
+$(document).on("click", ".qoption", function(event){
+    $('#answer').val($(event.target).attr("qno"))
+    $('.qselected').removeClass('qselected')
+    $(event.target).addClass('qselected')
+});
+
+$(document).on("click", ".qselected", function(event){
+    $('#answer').val("")
+    $('.qselected').removeClass('qselected')
+});
+
+</script>
+
+{% endblock %}

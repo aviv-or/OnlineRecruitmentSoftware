@@ -88,6 +88,7 @@ def profile(request):
 
 		org = user.organization()
 		if org.valid():
+			org['id'] = org['_id']
 			user['organization'] = org
 
 		user_name_arr = user['name'].split()

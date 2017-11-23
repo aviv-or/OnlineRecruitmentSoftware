@@ -17,16 +17,18 @@
                 Hiresome
             </a>
         </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/tests"> Browse Tests </a></li>
+        </ul>
         {% if login %}
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                     {% if user %}
-                    <span class="glyphicon glyphicon-user"></span> {{ user.name }}
+                    <span id="account-btn">{{user.initial}}</span>
                     {% elif org %}
-                    <span class="glyphicon glyphicon-user"></span> {{ org.name }}
+                    {{ org.name }}
                     {% endif %}
-                    <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="/profile"> Profile </a></li>
@@ -36,36 +38,37 @@
         </ul>
         {% else %}
         <ul class="nav navbar-nav navbar-right">
-            <li><a href="/login?r=/browse/test"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
+            <li><a href="/login?r=/tests"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
         </ul>
         {% endif %}
     </div>
 </nav>
 
-<div class="col-xs-10 col-xs-push-1">
-    <div class="row">
-        <div id="schedule-head" class="col-xs-12">
-            <div id="tests-head" class="inline-box">
-                LIVE CHALLENGES
-            </div>
-            <div class="inline-box" id="tests-head-line"></div>
-        </div>
+<div class="col-xs-12 col-md-10 col-md-push-1" id="tests-head-tabs">
+    <div class="col-xs-4 col-lg-2 active-tab test-tab" id="live-tab">
+        <span class="not"></span><span class="head">LIVE</span>
     </div>
+    <div class="col-xs-4 col-lg-2 test-tab" id="upcoming-tab">
+        <span class="not"></span><span class="head">UPCOMING</span>
+    </div>
+    <div class="col-xs-4 col-lg-2 test-tab" id="completed-tab">
+        <span class="not"></span><span class="head">COMPLETED</span>
+    </div>
+</div>
+
+<div class="col-xs-10 col-xs-push-1 test-list active-list" id="live-list">
     <div class="row" id="live-test-list"></div>
     <div class="row" id="live-loader-box"></div>
 </div>
 
-<div class="col-xs-10 col-xs-push-1">
-    <div class="row">
-        <div id="schedule-head" class="col-xs-12">
-            <div id="tests-head" class="inline-box">
-                UPCOMING CHALLENGES
-            </div>
-            <div class="inline-box" id="tests-head-line"></div>
-        </div>
-    </div>
+<div class="col-xs-10 col-xs-push-1 test-list" id="upcoming-list">
     <div class="row" id="upcoming-test-list"></div>
     <div class="row" id="upcoming-loader-box"></div>
+</div>
+
+<div class="col-xs-10 col-xs-push-1 test-list" id="completed-list">
+    <div class="row" id="completed-test-list"></div>
+    <div class="row" id="completed-loader-box"></div>
 </div>
 
 {% endblock %}
@@ -97,7 +100,7 @@
                 var suggestion = "";
                 for(var test of data.tests)
                 {
-                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4'><a href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><h4>"+test.name+"</h4><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='test-schedule-box'><h5><b>Date: </b>"+test.schedule.date+"</h5><h5><b>Time: </b>"+test.schedule.time+" UTC</h5><h5><b>Duration: </b>"+test.schedule.duration+" min</h5></div></div></div></div></a></div>";
+                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4 test-wrapper'><a title='"+test.name+"' href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><div class='test-name'>"+test.name+"</div><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='schedule-box'><div id='test_time' class='schedule-entry'><div class='head'>OPENS AT</div><div id='time'>"+test.pretty_date+" "+test.schedule.time+" UTC</div></div><div id='test_duration' class='schedule-entry'><div class='head'>DURATION</div><div id='duration'>"+test.pretty_duration+"</div></div></div></div></div></div></a></div>";
                 }
                 $('#live-test-list').append(suggestion)
             }
@@ -125,15 +128,66 @@
                 var suggestion = "";
                 for(var test of data.tests)
                 {
-                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4'><a href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><h4>"+test.name+"</h4><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='test-schedule-box'><h5><b>Date: </b>"+test.schedule.date+"</h5><h5><b>Time: </b>"+test.schedule.time+" UTC</h5><h5><b>Duration: </b>"+test.schedule.duration+" min</h5></div></div></div></div></a></div>";
+                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4 test-wrapper'><a title='"+test.name+"' href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><div class='test-name'>"+test.name+"</div><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='schedule-box'><div id='test_time' class='schedule-entry'><div class='head'>OPENS AT</div><div id='time'>"+test.pretty_date+" "+test.schedule.time+" UTC</div></div><div id='test_duration' class='schedule-entry'><div class='head'>DURATION</div><div id='duration'>"+test.pretty_duration+"</div></div></div></div></div></div></a></div>";
                 }
                 $('#upcoming-test-list').append(suggestion)
+            }
+        });
+    }
+    function get_completed_tests(){
+        $('#completed-loader-box').html("<div class='loader'></div>")
+        scheduled_test_request = $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: '/service/tests',
+            data: {"from": t_from, "max": t_max, "sort_with": "name", "test_type": "completed"},
+            success: function(result){
+                $('#completed-loader-box').html("")
+                data = JSON.parse(result)
+                if (data.result == "error")
+                {
+                    console.log(data.message)
+                    return;
+                }
+                if (data.length == 0)
+                {
+                    return;
+                }
+                var suggestion = "";
+                for(var test of data.tests)
+                {
+                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4 test-wrapper'><a title='"+test.name+"' href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><div class='test-name'>"+test.name+"</div><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='schedule-box'><div id='test_time' class='schedule-entry'><div class='head'>OPENS AT</div><div id='time'>"+test.pretty_date+" "+test.schedule.time+" UTC</div></div><div id='test_duration' class='schedule-entry'><div class='head'>DURATION</div><div id='duration'>"+test.pretty_duration+"</div></div></div></div></div></div></a></div>";
+                }
+                $('#completed-test-list').append(suggestion)
             }
         });
     }
     $('document').ready(function(){
         get_live_tests();
         get_upcoming_tests();
+        get_completed_tests();
+
+        $('#live-tab').click(function(){
+            $('.active-tab').removeClass('active-tab');
+            $('.active-list').removeClass('active-list');
+            $('#live-tab').addClass('active-tab');
+            $('#live-list').addClass('active-list')
+        });
+
+        $('#upcoming-tab').click(function(){
+            $('.active-tab').removeClass('active-tab');
+            $('.active-list').removeClass('active-list');
+            $('#upcoming-tab').addClass('active-tab');
+            $('#upcoming-list').addClass('active-list')
+        });
+
+        $('#completed-tab').click(function(){
+            $('.active-tab').removeClass('active-tab');
+            $('.active-list').removeClass('active-list');
+            $('#completed-tab').addClass('active-tab');
+            $('#completed-list').addClass('active-list')
+        });
+
     });
 </script>
 

@@ -57,7 +57,7 @@ class TestModule(TestModuleData):
 
         return False
 
-    def pretty_date(self, include_duration=False, year=True):
+    def pretty_date(self, include_duration=False, year=False):
         test_date_time = self['schedule']['date']+"-"+self['schedule']['time']
         test_date_time = datetime.strptime(test_date_time, "%d-%m-%Y-%H:%M")
 
@@ -69,8 +69,19 @@ class TestModule(TestModuleData):
         else:
             return test_date_time.strftime("%d %B")
 
-    def pretty_remaining_time(self):
-        days, hours, minutes = self.remaining_time()
+    def pretty_duration(self):
+        duration = self['schedule']['duration']
+        temp = int(duration)
+        result = ""
+        if temp/60 > 1:
+            result = str(temp/60) + "h"
+        else:
+            result = str(temp) + "min"
+
+        return result
+
+    def pretty_remaining_time(self, include_duration=False):
+        days, hours, minutes = self.remaining_time(include_duration)
         result = ""
         if days != 0:
             result += str(days) + "d "
@@ -98,9 +109,31 @@ class TestModule(TestModuleData):
 
         return days, hours, minutes
 
-    def submissions(self):
+    def submission_set(self):
         submissions = self.get('submissions')
-        return SubmissionSetDB.submission_set(uno=submissions)
+        subset = SubmissionSetDB.submission_set(uno=submissions)
+        if subset.valid():
+            return subset
+
+        result, subset = self.create_submission_set()
+        return subset
+
+    def save_submission(self, user_id, sub_id):
+        subset = self.submission_set()
+        if subset.get('submissions'):
+            subset['submissions'][user_id] = sub_id
+        else:
+            subset['submissions'] = {user_id: sub_id}
+        SubmissionSetDB.update(subset)
+
+    def create_submission_set(self):
+        result, subset = SubmissionSetDB.create({"test": self['_id'], "submissions": {}})
+        if result:
+            from db.test_module_database import TestModuleDB
+            self['submissions'] = subset['_id']
+            TestModuleDB.update(self)
+
+        return result, subset
 
     def valid(self, safe=True, schedule=False, job=False):
         if not super().valid(schedule, job):

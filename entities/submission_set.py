@@ -2,7 +2,7 @@ from db.interface.submission_set import SubmissionSetData
 
 class SubmissionSet(SubmissionSetData):
     def __init__(self, data=None):
-        super().__init()
+        super().__init__()
 
         self.loaded = False
         self.submissions = {}
@@ -55,7 +55,7 @@ class SubmissionSet(SubmissionSetData):
             return False
 
         if safe:
-            if not self.get('id'):
+            if not self.get('_id'):
                 self.error = self.Error.DOES_NOT_EXIST
                 return False
 

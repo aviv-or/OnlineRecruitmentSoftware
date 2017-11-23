@@ -19,7 +19,7 @@
             </a>
         </div>
         <ul class="nav navbar-nav">
-            
+            <li><a href="/tests"> Browse Tests </a></li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
             {% if user.role == "PS" or user.role == "SU" %}
@@ -212,6 +212,19 @@
         </div>
     </div>
 </div>
+
+<div class="col-xs-12 col-lg-8">
+    <div class="row">
+        <div class="col-xs-12 col-lg-10" id="completed-list">
+            <div id="test-list-head">
+                COMPLETED TESTS
+            </div>
+            <div class="row" id="completed-test-list"></div>
+            <div class="row" id="completed-loader-box"></div>
+        </div>
+    </div>
+</div>
+
 </div>
 
 {% endblock %}
@@ -222,6 +235,41 @@
 
     var user_name_request = null, user_email_request = null; ;
     var user_description_request = null, user_website_request = null;
+    {% if user.role == "HR" %}
+
+    var scheduled_test_request = null;
+    var s_from = 1;
+    var s_max = 6;
+    function get_completed_tests(){
+        $('#completed-loader-box').html("<div class='test-loader'></div>")
+        scheduled_test_request = $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: '/service/tests',
+            data: {"from": s_from, "max": s_max, "sort_with": "date", "test_type": "completed", "organization": "{{user.organization.id}}"},
+            success: function(result){
+                $('#completed-loader-box').html("")
+                data = JSON.parse(result)
+                if (data.result == "error")
+                {
+                    console.log(data.message)
+                    return;
+                }
+                if (data.length == 0)
+                {
+                    return;
+                }
+                var suggestion = "";
+                for(var test of data.tests)
+                {
+                    suggestion += "<div class='col-xs-12 col-md-6 test-wrapper'><a title='"+test.name+"' href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><div class='test-name'>"+test.name+"</div><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='schedule-box'><div id='test_status'><span id='status' class='"+test.status+"'>"+test.status+"</span></div><div id='test_time' class='schedule-entry'><div class='head'>OPENS AT</div><div id='time'>"+test.pretty_date+" "+test.schedule.time+" UTC</div></div><div id='test_duration' class='schedule-entry'><div class='head'>DURATION</div><div id='duration'>"+test.pretty_duration+"</div></div></div></div></div></div></a></div>";
+                }
+                $('#completed-test-list').append(suggestion)
+            }
+        });
+    }
+
+    {% endif %}
 
     $(document).on('click', '.change-entry', function(event){
         target = $(event.target).parent().parent().parent()
@@ -446,6 +494,12 @@
             }
         });
     });
+
+    {% if user.role == "HR" %}
+    $(document).ready(function(){
+        get_completed_tests()
+    });
+    {% endif %}
 
 </script>
 

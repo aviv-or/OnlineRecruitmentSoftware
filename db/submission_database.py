@@ -33,6 +33,8 @@ class SubmissionDB():
 
         sub = Submission(data)
         if not sub.valid(safe=False):
+            print("Submission Not Valid")
+            print(sub.error.name)
             return (False, sub)
 
         result = db.create_document(data)

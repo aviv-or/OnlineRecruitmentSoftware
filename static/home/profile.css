@@ -9,38 +9,6 @@
     animation: spin 1.5s linear infinite;
 }
 
-#nav-action-box {
-    padding: 0;
-    height: 100%;
-}
-
-#account-btn-box {
-    padding: 0;
-    height: 100%;
-}
-
-#plus-btn {
-    display: inline-block;
-    font-size: 20px;
-    line-height: 50px;
-    height: 50px;
-    width: 50px;
-    text-align: center;
-}
-
-#account-btn {
-    display: inline-block;
-    height: 50px;
-    width: 50px;
-    color: #fff;
-    text-transform: uppercase;
-    line-height: 50px;
-    font-family: sans;
-    font-size: 18px;
-    text-align: center;
-}
-
-
 #banner-internal #welcome,#username
 {
 	text-align: center;
@@ -117,7 +85,7 @@
 }
 
 #main-wrapper {
-    margin-top: 50px;
+    margin-top: 30px;
 }
 
 #profile-box {
@@ -295,3 +263,133 @@
     line-height: 40px;
     font-size: 16px;
 }
+
+#completed-list {
+    padding-top: 50px;
+}
+
+#test-list-head {
+    font-size: 18px;
+    text-transform: uppercase;
+    color: rgb(120,120,120);
+}
+
+.test-wrapper {
+    padding: 15px;
+}
+
+.test-wrapper a, a:hover, a:focus {
+    text-decoration: none;
+}
+
+.test {
+    padding: 15px;
+    height: 100%;
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    background-color: #fff;
+    color: rgb(30,30,40);
+}
+
+.test .test-name {
+    font-size: 18px;
+    line-height: 25px;
+    max-height: 50px;
+    height: 50px;
+    color: #46535e;
+    overflow: hidden;
+}
+
+.test-category-box{
+    font-size: 12px;
+    background-color: #f3f3f3;
+    padding: 3px 5px;
+    border-radius: 2px;
+}
+
+.test-loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    margin-top: 50px;
+    margin-left: 50%;
+    left: -20px;
+    -webkit-animation: spin 1.5s linear infinite;
+    animation: spin 1.5s linear infinite;
+}
+
+.schedule-box {
+    padding: 15px 0 0 0;
+    color: #46535e;
+}
+
+.schedule-box a, a:hover, a:focus {
+    text-decoration: none;
+}
+
+#test_status #status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+#test_status .coming {
+    background-color: #ffff53;
+    color: #555;
+}
+
+#test_status .live {
+    background-color: #9c0;
+    color: #fff;
+    font-weight: bold;
+}
+
+#test_status .completed {
+    background-color: crimson;
+    color: #fff;
+    font-weight: bold;
+}
+
+.schedule-entry {
+    margin-top: 15px;
+}
+
+.schedule-entry .head {
+    color: #c1c1c1;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#test_time #time {
+    font-size: 18px;
+}
+
+#test_duration #duration {
+    font-size: 18px;
+}
+
+#remaining_time {
+    letter-spacing: 2px;
+    font-size: 30px;
+    text-align: center;
+}
+
+#tests-head{
+    font-size: 20px;
+    color: #222;
+}
+
+#tests-head-line{
+    border-bottom: 2px solid #e9e9e9;
+    height: 20px;
+    width: 100%;
+}
+
+.inline-box{
+    display: inline-block;
+}
+

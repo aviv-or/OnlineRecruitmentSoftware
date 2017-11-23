@@ -17,11 +17,13 @@
                 Hiresome
             </a>
         </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/tests"> Browse Tests </a></li>
+        </ul>
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <span class="glyphicon glyphicon-user"></span> {{ org.name }}
-                    <span class="caret"></span>
+                    {{ org.name }}
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="/profile"> Profile </a></li>
@@ -37,16 +39,16 @@
         {% if alert %}
         <div class="alert alert-{{alert.type}}"> {{alert.message}} </div> <br>
         {% endif %}
-        <div class="responsive-form">
-            <div class="responsive-field">
-                <div class="responsive-field-label">Add Employee</div>
-                <input required="required" type="text" class="responsive-field-input" id="search-user-field" autocomplete="off">
+        <div class="row f-field" style="margin-top: 20px;">
+            <div class="f-field-label">ADD EMPLOYEE <span class='red'>*</span> </div>
+            <div  class="col-xs-12 f-input">
+                <input required="required" type="text" name="test_category" id="search-user-field">
             </div>
         </div>
         <div class="row" id="form-suggestions"></div>
         <div class="row">
             <div class="col-xs-12 col-lg-4">
-                <span id="hr-box">Human Resource Manager</span><br><br>
+                <span id="hr-box">HR Manager</span><br><br>
                 {% if org.employees.HR %}
                 <div class="employee">
                     <div class="row">

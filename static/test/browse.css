@@ -1,3 +1,7 @@
+body {
+    background-color: #f6f6f6;
+}
+
 #schedule-head{
     margin: 25px 0px;
     font-family: 'Open Sans Condensed', sans;
@@ -5,11 +9,78 @@
     font-size: 20px;
 }
 
+#tests-head-tabs {
+    margin-top: 50px;
+    color: #111;
+}
+
+.test-list {
+    padding: 0;
+    display: none;
+}
+
+.active-list {
+    display: block;
+}
+
+.test-tab {
+    text-align: center;
+    text-transform: uppercase;
+    background-color: #fff;
+    height: 40px;
+    line-height: 40px;
+    color: #333;
+    font-size: 16px;
+    cursor: pointer;
+    border-right: 1px solid #f2f2f2;
+}
+
+.active-tab {
+    background-color: #a9d4ff;
+    color: #fff;
+}
+
+.active-tab:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    top: 75%;
+    border-radius: 100%;
+    z-index: -1;
+    background-color: #a9d4ff;
+    left: 0;
+}
+
+@media(max-width: 767px)
+{
+    #tests-head-tabs {
+        padding: 0 5px;
+    }
+    .test-tab {
+        font-size: 14px;
+    }
+}
+
+.test-list {
+    margin-top: 50px;
+}
+
+.test-wrapper {
+    padding: 15px;
+}
+
+.test-wrapper a, a:hover, a:focus {
+    text-decoration: none;
+}
+
 .test {
     padding: 15px;
     height: 100%;
     width: 100%;
     border: 1px solid #e0e0e0;
+    background-color: #fff;
+    color: rgb(30,30,40);
 }
 
 .test-category-box{
@@ -42,11 +113,46 @@
     100% { transform: rotate(360deg); }
 }
 
-.test-schedule-box {
+
+.schedule-box {
+    padding: 15px 0 0 0;
+    color: #46535e;
+}
+
+.schedule-box a, a:hover, a:focus {
+    text-decoration: none;
+}
+
+#test_status #status {
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 13px;
+}
+
+.schedule-entry {
+    margin-top: 15px;
+}
+
+.schedule-entry .head {
+    color: #c1c1c1;
     font-size: 12px;
-    border: 1px dashed #eee;
-    padding: 3px 5px;
-    margin-top: 20px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+#test_time #time {
+    font-size: 18px;
+}
+
+#test_duration #duration {
+    font-size: 18px;
+}
+
+#remaining_time {
+    letter-spacing: 2px;
+    font-size: 30px;
+    text-align: center;
 }
 
 #tests-head{

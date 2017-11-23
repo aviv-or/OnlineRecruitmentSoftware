@@ -1,4 +1,4 @@
-import enum
+from enum import Enum
 
 class SubmissionData(dict):
 
@@ -6,13 +6,13 @@ class SubmissionData(dict):
         self['_id']             = None
         self['test']            = None
         self['user']            = None
-        self['responses']       = None
+        self['responses']       = {}
 
     def load(self, data):
         self['_id']             = data.get('_id')
         self['test']            = data.get('test')
         self['user']            = data.get('user')
-        self['responses']       = data.get('responses')
+        self['responses']       = data.get('responses', {})
 
     def valid(self):
         self.error = self.Error.NONE
@@ -23,17 +23,13 @@ class SubmissionData(dict):
         elif not self.get('user'):
             self.error = self.Error.USER
 
-        elif not self.get('responses'):
-            self.error = self.Error.RESPONSES
-
         if self.error != self.Error.NONE:
             return False
 
         return True
 
-    class Error(enum.Enum):
+    class Error(Enum):
         NONE                    = "None"
         DOES_NOT_EXIST          = "Does Not Exist"
         USER                    = "Doesn't Belong To a User"
         TEST                    = "Doesn't Belong To a Test"
-        RESPONSES               = "Doesn't have any Responses"

@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title %} Test {% endblock %}
+{% block title %} {{ test.name }} {% endblock %}
 
 {% block headcss %}
 {% load static %}
@@ -16,16 +16,18 @@
                 Hiresome
             </a>
         </div>
+        <ul class="nav navbar-nav">
+            <li><a href="/tests"> Browse Tests </a></li>
+        </ul>
         {% if login %}
         <ul class="nav navbar-nav navbar-right">
             <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                <a class="dropdown-toggle" id="account-btn-box" data-toggle="dropdown" href="#">
                     {% if user %}
-                    <span class="glyphicon glyphicon-user"></span> {{ user.name }}
+                    <span id="account-btn">{{user.initial}}</span>
                     {% elif org %}
                     <span class="glyphicon glyphicon-user"></span> {{ org.name }}
                     {% endif %}
-                    <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
                     <li><a href="/profile"> Profile </a></li>
@@ -60,7 +62,7 @@
                                 OPENS AT
                             </div>
                             <div id="time">
-                                {{test.schedule.date}} {{ test.schedule.time }} UTC
+                                {{test.schedule.open_date}} {{ test.schedule.time }} UTC
                             </div>
                         </div>
                         <div id="test_duration" class="schedule-entry">
@@ -71,7 +73,7 @@
                                 {{test.schedule.duration}}
                             </div>
                         </div>
-                        {% if test.remaining_time %}
+                        {% if test.remaining_time and test.status != 'completed' %}
                         <div id="test_remaining_time" class="schedule-entry">
                             <div class="head">
                                 {% if test.status == "live" %}
@@ -85,11 +87,20 @@
                             </div>
                         </div>
                         {% endif %}
-                        {% if test.status == "live" %}
+                        {% if test.status == 'live' %}
                         <div class="schedule-entry">
                             <a href="/test/start/{{test.id}}">
                                 <div class="btn btn-block" id="give_test_btn">
                                     START NOW
+                                </div>
+                            </a>
+                        </div>
+                        {% endif %}
+                        {% if test.status == 'completed' and user and user.role == "HR" and test.organization.id == user.organization.id %}
+                        <div class="schedule-entry">
+                            <a href="/test/analyze/{{test.id}}">
+                                <div class="btn btn-block" id="analyze_test_btn">
+                                    ANALYZE
                                 </div>
                             </a>
                         </div>
@@ -182,9 +193,27 @@
                     {% endif %}
                 </div> 
             </div>
+            {% if test.status == "completed" %}
+            <div id="review_block" class="col-xs-12 col-md-8">
+                <div id="head">
+                    REVIEWS
+                </div>
+                <div id="review_list" class="col-xs-12">
+                    
+                </div>
+                <div id="loader_box" class="col-xs-12">
+                    <div class="loader"></div>
+                </div>
+                <div id="load_more" class="col-xs-12">
+                    More Reviews
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
+
+
 
 {% endblock %}
 
@@ -192,9 +221,53 @@
 
 <script>
 var rem_time_request = null
+{% if test.status == "completed" %}
+var review_request = null;
+var s_from = 1;
+var s_max = 6;
+function load_reviews() {
+    test_id = $('#test_id').val()
+    if (review_request)
+    {
+        review_request.abort()
+        review_request = null
+    }
+    $('#loader_box').css("display", "block")
+    review_request = $.ajax({
+
+        type: 'GET',
+        dataType: 'json',
+        url: '/service/tests/reviews',
+        data: {"id": test_id, "from": s_from, "max": s_max},
+        success: function(result){
+            data = JSON.parse(result)
+            if (data.result == "error")
+            {
+                console.log(data.message);
+                $('#loader_box').css("display", "none")
+                return;
+            }
+
+            if(parseInt(data.length) < s_max)
+            {
+                $('#load_more').remove()
+            }
+            reviews = ""
+            for (r in data.reviews)
+            {
+                reviews += "<div class='row review-wrapper'><div class='review col-xs-12'>"+data.reviews[r]+"</div></div>"
+            }
+            $('#review_list').append(reviews)
+            $('#loader_box').css("display", "none")
+        }
+    });
+
+}
+{% endif %}
+
 $(document).ready(function(){
 
-    {% if test.remaining_time %}
+    {% if test.status != "completed" %}
     var x = setInterval(function() {
         var test_id = $('#test_id').val()
         if (rem_time_request)
@@ -207,7 +280,11 @@ $(document).ready(function(){
             type: 'GET',
             dataType: 'json',
             url: '/service/tests/time',
+            {% if test.status == "live" %}
+            data: {"id": test_id, "include":"duration"},
+            {% else %}
             data: {"id": test_id},
+            {% endif %}
             success: function(result){
                 data = JSON.parse(result)
                 if (data.result == "error")
@@ -226,6 +303,13 @@ $(document).ready(function(){
         });
 
     }, 60000);
+    {% else %}
+    $('#load_more').click(function(){
+        s_from += s_max
+        load_reviews()
+    });
+
+    load_reviews()
     {% endif %}
 
 });

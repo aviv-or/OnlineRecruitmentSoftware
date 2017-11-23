@@ -1,5 +1,6 @@
 from db.interface.user_data import UserData
 from db.organization_database import OrganizationDB
+from db.submission_database import SubmissionDB
 from .organization import Organization
 
 class User(UserData):
@@ -23,6 +24,21 @@ class User(UserData):
             org = Organization()
 
         return org
+
+    def submission(self, test=None):
+        submissions = self.get('submissions')
+        return SubmissionDB.submission(uno=submissions.get(test))
+
+    def register_for_test(self, test):
+        sub = {"user": self['_id'], "test": test['_id']}
+        result, submission = SubmissionDB.create(sub)
+        if not result:
+            return result
+
+        self['submissions'][test['_id']] = submission['_id']
+        test.save_submission(self['_id'], submission['_id'])
+
+        return result
 
     def valid(self, safe=True):
         if not super().valid():

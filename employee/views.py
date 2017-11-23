@@ -41,6 +41,11 @@ class CreateProblemSet(View):
         if user['role'] != PROBLEM_SETTER:
             return HttpResponseRedirect("/profile")
 
+        user_name_arr = user['name'].split()
+        user_init = ""
+        for i in user_name_arr:
+            user_init += i[0]
+        user['initial'] = user_init
         context['user'] = user
 
         if ADD_PROBLEM_SET_RESULT in request.session:
@@ -201,6 +206,11 @@ class CreateTestModule(View):
         if user['role'] != TEST_SUPERVISOR:
             return HttpResponseRedirect("/profile")
 
+        user_name_arr = user['name'].split()
+        user_init = ""
+        for i in user_name_arr:
+            user_init += i[0]
+        user['initial'] = user_init
         context['user'] = user
 
         now = datetime.now()
@@ -287,6 +297,7 @@ class CreateTestModule(View):
                     "description": test_description,
                     "organization": org['_id'],
                     "problem_sets": [],
+                    "submissions": None,
                     "schedule": None, 
                     "job_offer": None,
                 }
@@ -343,6 +354,11 @@ class CreateTestModule(View):
             print("error in creating document in Test Modules")
             request.session[ADD_TEST_MODULE_RESULT] = CreateTMResult.SOMETHING_ELSE.value
             return HttpResponseRedirect("/create/test-module")
+
+        result, subset= SubmissionSetDB.create({"test": test['_id']})
+        if result:
+            test['submissions'] = subset['_id']
+            TestModuleDB.update(test)
 
         org['test_modules'].append(test['_id'])
         OrganizationDB.update(org)
