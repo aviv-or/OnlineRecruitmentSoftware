@@ -82,7 +82,7 @@ class Coding(Question):
 
         self['input']        = data.get('input')
         self['output']       = data.get('output')
-        self['time_limit']   = data.get('time_limit')
+        self['time_limit']   = data.get('time_limit', 5)
         self['marks']        = data.get('marks')
 
     def valid(self):
