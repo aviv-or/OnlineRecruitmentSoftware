@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_with_nav.html' %}
 
 {% block title %}Admin Panel{% endblock %}
 
@@ -12,7 +12,6 @@
 <nav class="navbar navbar-default">
 	<div class="container-fluid">
 		<div class="navbar-header">
-            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
             <a class="navbar-brand" href="#">
                 Hiresome
             </a>

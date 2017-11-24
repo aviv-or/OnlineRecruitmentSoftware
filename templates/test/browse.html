@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_with_nav.html' %}
 
 {% block title %}Tests - skillmagnet{% endblock %}
 
@@ -8,41 +8,6 @@
 {% endblock %}
 
 {% block content %}
-
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
-            <a class="navbar-brand" href="#">
-                Hiresome
-            </a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="/tests"> Browse Tests </a></li>
-        </ul>
-        {% if login %}
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    {% if user %}
-                    <span id="account-btn">{{user.initial}}</span>
-                    {% elif org %}
-                    {{ org.name }}
-                    {% endif %}
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/profile"> Profile </a></li>
-                    <li><a href="/logout?r=/tests"> Logout </a></li>
-                </ul>
-            </li>
-        </ul>
-        {% else %}
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="/login?r=/tests"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
-        </ul>
-        {% endif %}
-    </div>
-</nav>
 
 <div class="col-xs-12 col-md-10 col-md-push-1" id="tests-head-tabs">
     <div class="col-xs-4 col-lg-2 active-tab test-tab" id="live-tab">

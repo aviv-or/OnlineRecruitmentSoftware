@@ -1,36 +1,170 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,900');
+
 .red
 {
     color: red;
     font-size: 14px;
 }
 
-#logo {
-    position: absolute;
-    top: 5px;
-    left: 5px;
-    width: 30px;
-    height: 30px;
+#main-wrapper {
+    margin-top: 40px;
 }
 
-.navbar {
+#navbar {
     margin-bottom: 0;
-    background-color: #000;
+    background-color: rgb(10,0,20);
     color: #fff;
     border: 0;
     border-radius: 0;
     height: 40px;
     min-height: 40px;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    top: 0;
 }
 
-.navbar > .container .navbar-brand,
-.navbar > .container-fluid .navbar-brand {
-    font-family: sans, sans-serif;
-    letter-spacing: -1px;
+#navbar #brand {
     color: #fff;
     margin-left: 10px;
     height: 40px;
-    padding: 0 15px;
+    padding: 0;
     line-height: 40px;
+    font-weight: 900;
+    letter-spacing: 0px;
+    font-family: 'Montserrat', sans;
+    font-size: 22px;
+    text-transform: uppercase;
+}
+
+#navbar-actions li {
+    display: inline-block;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    color: #fff;
+    list-style: none;
+}
+
+#navbar-actions li a, a:focus, a:hover {
+    text-decoration: none;
+    color: #fff;
+}
+
+#navbar .sidebar-open {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    right: 0;
+    width: auto;
+    text-align: center;
+    display: block;
+    height: 40px;
+    line-height: 40px;
+    text-align: right;
+    padding: 0 15px;
+}
+
+.sidebar-wrapper {
+    height: calc(100vh - 40px);
+    position: fixed;
+    top: 40px;
+    left: calc(100% + 40px);
+    padding: 0px;
+    z-index: 100;
+    opacity: 0;
+    transition: opacity 0.3s;
+    -moz-transition: opacity 0.3s;
+    -ms-transition: opacity 0.3s;
+    -webkit-transition: opacity 0.3s;
+}
+
+.show-sidebar {
+    left: initial;
+    right: 0;
+    opacity: 1
+}
+
+.sidebar-wrapper #sidebar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #fff;
+    overflow-y: auto;
+}
+
+.sidebar-wrapper:before {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    height: 100%;
+    top: 0;
+    left: 0;
+    width: 60px;
+    border-radius: 100%;
+    background-color: #fff;
+    box-shadow: -3px 1px 20px rgba(235,235,235,1);
+}
+
+.sidebar-wrapper #close {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: -40px;
+    background-color: #fff;
+    text-align: center;
+    height: 40px;
+    width: 40px;
+    font-size: 18px;
+    line-height: 40px;
+    cursor: pointer;
+}
+
+#sidebar #greeting {
+    letter-spacing: 0px;
+    color: rgb(20,0,60);
+    font-size: 18px;
+    padding: 30px 15px;
+    border-bottom: 1px solid rgba(245,245,245,1);
+}
+
+#sidebar #greeting .bold {
+    font-family: 'Montserrat', sans;
+    font-weight: 400;
+}
+
+#sidebar .action-block {
+    padding: 20px 10px 20px 30px;
+    text-transform: uppercase;
+}
+
+#sidebar .action-block li {
+    height: 40px;
+    line-height: 40px;
+    font-size: 12px;
+    color: rgb(20,0,60);
+    list-style: none;
+}
+
+@media(max-width: 991px)
+{
+    #sidebar .action-block li {
+        font-size: 16px;
+    }
+}
+
+@media(min-width: 1500px)
+{
+    #sidebar .action-block li {
+        font-size: 14px;
+    }
+}
+
+#sidebar .action-block li a, a:focus, a:hover {
+    text-decoration: none;
+    color: rgb(10,0,20);
 }
 
 .navbar-default .navbar-nav > li > a ,
@@ -64,31 +198,35 @@
 
 #nav-action-box {
     padding: 0;
-    height: 100%;
+    height: 40px;
 }
 
 #account-btn-box {
     padding: 0;
-    height: 100%;
+    margin: 2px;
+    height: 36px;
+    width: 36px;
+    background-color: #fff;
+    color: rgb(10,0,20);
+    border-radius: 50%;
+}
+
+#account-btn {
+    display: inline-block;
+    height: 36px;
+    width: 36px;
+    text-transform: uppercase;
+    line-height: 36px;
+    font-family: sans;
+    font-size: 18px;
+    text-align: center;
 }
 
 #plus-btn {
     display: inline-block;
     font-size: 20px;
-    line-height: 37px;
-    height: 38px;
-    width: 50px;
-    text-align: center;
-}
-
-#account-btn {
-    display: inline-block;
-    height: 38px;
-    width: 50px;
-    color: #fff;
-    text-transform: uppercase;
-    line-height: 37px;
-    font-family: sans;
-    font-size: 18px;
+    line-height: 40px;
+    height: 40px;
+    width: 40px;
     text-align: center;
 }

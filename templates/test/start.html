@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_with_nav.html' %}
 
 {% block title %} {{ test.name }} {% endblock %}
 
@@ -11,46 +11,28 @@
 
 {% block content %}
 
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
-            <a class="navbar-brand" href="#">
-                Hiresome
-            </a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="/tests"> Browse Tests </a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            {% if user.role == "PS" or user.role == "SU" %}
-             <li class="dropdown">
-                <a class="dropdown-toggle" id="nav-action-box" data-toggle="dropdown" href="#">
-                    <span class="fa fa-plus" id="plus-btn"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    {% if user.role == "PS" %}
-                    <li><a href="/create/problem-set">Create Problem Set</a></li>
-                    {% elif user.role == "SU" %}
-                    <li><a href="/create/test-module">Create Test Module</a></li>
-                    {% endif %}
-                </ul>
-            </li>
-            {% endif %}
-            <li class="dropdown">
-                <a class="dropdown-toggle" id="account-btn-box" data-toggle="dropdown" href="#">
-                    <span id="account-btn">{{user.initial}}</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/profile"> Profile </a></li>
-                    <li><a href="/logout?r=/"> Logout </a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>
-
 <input type="hidden" id="test_id" value="{{test.id}}">
+
+<div class="col-xs-12 help-info">
+    <div class="row">
+        <div class="col-xs-1 help-icon-col">
+            <span class="ti-info-alt"></span>
+        </div>
+        <div class="col-xs-10 help-desc-col">
+            <div class="row">
+                <div class="col-xs-12 help-desc-title">
+                    ABOUT GIVING TESTS
+                </div>
+                <div class="col-xs-12 help-desc-data">
+                    Responses are saved automatically after you move to another question. 
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-1 help-close-col">
+            <span class="ti-close"></span>
+        </div>
+    </div>
+</div>
 
 <div class="col-xs-12">
     <div class="row" id="test_head">
@@ -58,12 +40,7 @@
             <div id="test_name">
                 {{test.name}}
             </div>
-        </div><!-- 
-        <div class="col-xs-12 col-md-4 col-lg-3 col-lg-push-1">
-            <div id="remaining_time">
-                {{test.remaining_time}}
-            </div>
-        </div> -->
+        </div>
     </div>
 </div>
 
@@ -527,6 +504,10 @@ $(document).ready(function(){
         });
 
     }, 60000);
+
+    $('.help-close-col').click(function(event){
+        $('.help-info').remove()
+    });
 
     $('.question_no').click(function(event){
         target = $(event.target)

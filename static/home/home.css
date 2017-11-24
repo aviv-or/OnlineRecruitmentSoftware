@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css?family=Montserrat:200,400,900');
-
 #banner-image {
 	position: fixed;
 	z-index: -1;
@@ -123,6 +121,7 @@
 	border-radius: 5px;
 	box-shadow: 0;
 	border: 0;
+	font-weight: bold;
 }
 
 #login-block #register {

@@ -10,16 +10,12 @@ body
 }
 
 #register_box {
-	position: absolute;
 	background-color: #fff;
-	top: 50px;
-	left: 50%;
-	transform: translateX(-50%);
 }
 
 #register_box_internal
 {
-	margin: 20px 0px;
+	margin: 10px 0px;
 }
 
 @media(min-width: 768px)
@@ -28,8 +24,9 @@ body
 	{
 		background-color: #ececec;
 	}
-	#register_box
-	{
+
+	#register_box {
+		margin-top: 80px;
 		box-shadow: 0px 0px 8px #ddd;
 	}
 }
@@ -44,4 +41,38 @@ body
 {
 	font-size: 12px;
 	color: #666;
+}
+
+#register_box_internal .f-field, .f-text {
+	padding: 0;
+}
+
+#register_box_internal .f-field input, textarea, option, select {
+	font-size: 14px;
+}
+
+#register_box_internal button {
+	height: 40px;
+	line-height: 40px;
+	padding: 0;
+	background-color: rgb(10,0,20);
+	color: #fff;
+	border-radius: 5px;
+	box-shadow: 0;
+	border: 0;
+	font-weight: bold;
+}
+
+#register {
+	margin-top: 5px;
+	color: #888;
+	font-size: 14px;
+}
+
+#register-btn {
+	padding: 15px 0;
+}
+
+#info {
+	padding-top: 10px;
 }

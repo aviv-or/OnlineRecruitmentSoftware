@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_with_nav.html' %}
 
 {% block title %}Create Tests{% endblock %}
 
@@ -9,44 +9,6 @@
 
 {% block content %}
 {% load static %}
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
-            <a class="navbar-brand" href="#">
-                Hiresome
-            </a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="/tests"> Browse Tests </a></li>
-        </ul>
-        <ul class="nav navbar-nav navbar-right">
-            {% if user.role == "PS" or user.role == "SU" %}
-             <li class="dropdown">
-                <a class="dropdown-toggle" id="nav-action-box" data-toggle="dropdown" href="#">
-                    <span class="fa fa-plus" id="plus-btn"></span>
-                </a>
-                <ul class="dropdown-menu">
-                    {% if user.role == "PS" %}
-                    <li><a href="/create/problem-set">Create Problem Set</a></li>
-                    {% elif user.role == "SU" %}
-                    <li><a href="/create/test-module">Create Test Module</a></li>
-                    {% endif %}
-                </ul>
-            </li>
-            {% endif %}
-            <li class="dropdown">
-                <a class="dropdown-toggle" id="account-btn-box" data-toggle="dropdown" href="#">
-                    <span id="account-btn">{{user.initial}}</span>
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/profile"> Profile </a></li>
-                    <li><a href="/logout?r=/"> Logout </a></li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>
 
 <div id="pset-window-frame">
 <div class="col-xs-11" id="pset-window">

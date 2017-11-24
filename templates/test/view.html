@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends 'base_with_nav.html' %}
 
 {% block title %} {{ test.name }} {% endblock %}
 
@@ -8,40 +8,6 @@
 {% endblock %}
 
 {% block content %}
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-        <div class="navbar-header">
-            <img id="logo" src="{% static 'image/logo.svg' %}" onerror="this.src='{% static 'image/logo.svg' %}'">
-            <a class="navbar-brand" href="#">
-                Hiresome
-            </a>
-        </div>
-        <ul class="nav navbar-nav">
-            <li><a href="/tests"> Browse Tests </a></li>
-        </ul>
-        {% if login %}
-        <ul class="nav navbar-nav navbar-right">
-            <li class="dropdown">
-                <a class="dropdown-toggle" id="account-btn-box" data-toggle="dropdown" href="#">
-                    {% if user %}
-                    <span id="account-btn">{{user.initial}}</span>
-                    {% elif org %}
-                    <span class="glyphicon glyphicon-user"></span> {{ org.name }}
-                    {% endif %}
-                </a>
-                <ul class="dropdown-menu">
-                    <li><a href="/profile"> Profile </a></li>
-                    <li><a href="/logout?r=/test/{{ test.id }}"> Logout </a></li>
-                </ul>
-            </li>
-        </ul>
-        {% else %}
-        <ul class="nav navbar-nav navbar-right">
-            <li><a href="/login?r=/test/{{ test.id }}"><span class="glyphicon glyphicon-log-in"></span> Login </a></li>
-        </ul>
-        {% endif %}
-    </div>
-</nav>
 
 <input type="hidden" id="test_id" value="{{ test.id }}">
 
