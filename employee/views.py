@@ -9,6 +9,7 @@ from db.user_database import UserDB
 from db.organization_database import OrganizationDB
 from db.problem_set_database import ProblemSetDB
 from db.test_module_database import TestModuleDB
+from db.submission_set_database import SubmissionSetDB
 
 from entities.user import User
 from entities.problem_set import ProblemSet

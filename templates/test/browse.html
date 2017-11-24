@@ -65,7 +65,7 @@
                 var suggestion = "";
                 for(var test of data.tests)
                 {
-                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4 test-wrapper'><a title='"+test.name+"' href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><div class='test-name'>"+test.name+"</div><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='schedule-box'><div id='test_time' class='schedule-entry'><div class='head'>OPENS AT</div><div id='time'>"+test.pretty_date+" "+test.schedule.time+" UTC</div></div><div id='test_duration' class='schedule-entry'><div class='head'>DURATION</div><div id='duration'>"+test.pretty_duration+"</div></div></div></div></div></div></a></div>";
+                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4 test-wrapper'><a title='"+test.name+"' href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><div class='test-name'>"+test.name+"</div><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='schedule-box'><div id='test_time' class='schedule-entry'><div class='head'>OPENS AT</div><div id='time'>"+test.pretty_date+" "+test.schedule.time+" UTC</div></div><div id='test_duration' class='schedule-entry'><div class='head'>DURATION</div><div id='duration'>"+test.pretty_duration+"</div></div><div id='test_remaining_time' class='schedule-entry'><div class='head'>ENDS IN</div><div id='remaining_time'>"+test.pretty_remaining_time+"</div></div></div></div></div></div></a></div>";
                 }
                 $('#live-test-list').append(suggestion)
             }
@@ -93,7 +93,7 @@
                 var suggestion = "";
                 for(var test of data.tests)
                 {
-                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4 test-wrapper'><a title='"+test.name+"' href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><div class='test-name'>"+test.name+"</div><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='schedule-box'><div id='test_time' class='schedule-entry'><div class='head'>OPENS AT</div><div id='time'>"+test.pretty_date+" "+test.schedule.time+" UTC</div></div><div id='test_duration' class='schedule-entry'><div class='head'>DURATION</div><div id='duration'>"+test.pretty_duration+"</div></div></div></div></div></div></a></div>";
+                    suggestion += "<div class='col-xs-12 col-md-6 col-lg-4 test-wrapper'><a title='"+test.name+"' href='/test/"+test.id+"'><div class='test'><div class='row'><div class='col-xs-12'><div class='test-name'>"+test.name+"</div><span class='test-category-box'><span class='glyphicon glyphicon-tag'></span> "+test.category+"</span><div class='schedule-box'><div id='test_time' class='schedule-entry'><div class='head'>OPENS AT</div><div id='time'>"+test.pretty_date+" "+test.schedule.time+" UTC</div></div><div id='test_duration' class='schedule-entry'><div class='head'>DURATION</div><div id='duration'>"+test.pretty_duration+"</div></div><div id='test_remaining_time' class='schedule-entry'><div class='head'>LIVE IN</div><div id='remaining_time'>"+test.pretty_remaining_time+"</div></div></div></div></div></div></a></div>";
                 }
                 $('#upcoming-test-list').append(suggestion)
             }

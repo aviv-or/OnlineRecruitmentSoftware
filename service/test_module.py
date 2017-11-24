@@ -128,10 +128,12 @@ def find_tests (request):
         t['pretty_duration'] = t.pretty_duration()
         if t.is_live():
             t['status'] = "live"
+            t['pretty_remaining_time'] = t.pretty_remaining_time(True)
         elif t.is_completed():
             t['status'] = "completed"
         else:
             t['status'] = "coming"
+            t['pretty_remaining_time'] = t.pretty_remaining_time()
         del t['_id']
 
     response['result'] = "success"

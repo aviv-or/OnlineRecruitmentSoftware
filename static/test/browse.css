@@ -160,6 +160,15 @@ body {
     color: #222;
 }
 
+.test .test-name {
+    font-size: 18px;
+    line-height: 25px;
+    max-height: 50px;
+    height: 50px;
+    color: #46535e;
+    overflow: hidden;
+}
+
 #tests-head-line{
     border-bottom: 2px solid #e9e9e9;
     height: 20px;
